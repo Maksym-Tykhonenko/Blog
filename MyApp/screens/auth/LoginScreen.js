@@ -43,12 +43,12 @@ const LoginScreen = ({ navigation }) => {
             <ImageBackground
                 style={styles.img}
                 source={require('../../accets/backgroundImageForBlog.jpeg')}>
-
+                
                 <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
                     <View style={{ ...styles.form, marginBottom: isShowKeyboard ? 20 : 180 }}>
-
+                        <Text>Your personal travel blog</Text>
                         <View>
                             <Text style={styles.inputTitle}>Name</Text>
                             <TextInput

@@ -10,7 +10,7 @@ import { useRoute } from './router';
 
 const App = () => {
 
-  const routing = useRoute(true)
+  const routing = useRoute(false)
 
   return (
 
@@ -22,6 +22,3 @@ const App = () => {
 };
 
 export default App;
-
-
-  

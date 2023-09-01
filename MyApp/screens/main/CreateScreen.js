@@ -1,33 +1,58 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
     Alert,
+    Button,
+    ActivityIndicator
 } from "react-native";
+import { Camera, useCameraDevices } from "react-native-vision-camera";
+
+import { useLinkTo } from '@react-navigation/native';
+
 
 
 const CreateScreen = () => {
+
+    const devices = useCameraDevices()
+    const device = devices.back;
+
+    useEffect(() => {
+        checkPermission()
+    }, []);
+
+
+    const checkPermission = async () => {
+        const newCameraPermission = await Camera.requestCameraPermission()
+        const newMicrophonePermission = await Camera.requestMicrophonePermission()
+    
+        console.log(newCameraPermission);
+    };
+
+     
+ if (device == null) return <ActivityIndicator />
+
     return (
         <View style={styles.conteiner}>
-            <Text style={styles.text}>Create Screen</Text>
-            <TouchableOpacity
-                onPress={() => {
-                    Alert.alert('Open Camera')
-                }}
-                style={styles.btn}>
-                <Text>Open</Text>
-            </TouchableOpacity>
+         
+          
+            <Camera
+                style={StyleSheet.absoluteFill}
+                device={device}
+                isActive={true}
+            />
+                
+
         </View>
-    )
+    );
 };
 
 const styles = StyleSheet.create({
     conteiner: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        
     },
     text: {
         fontSize: 20,
