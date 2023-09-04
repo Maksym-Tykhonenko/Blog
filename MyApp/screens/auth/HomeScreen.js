@@ -6,14 +6,10 @@ import {
     TextInput, 
     ImageBackground, 
     TouchableOpacity, 
-    Platform,
-    KeyboardAvoidingView,
-    Keyboard,
-    Button,
     FlatList,
-    SafeAreaView,
     ScrollView,
-    Alert
+    Modal,
+    Pressable
 } from 'react-native';
 
 
@@ -262,14 +258,15 @@ const countries = [
 
 const HomeScreen = ({ navigation }) => {
     
-    const [statys, setStatys] = useState('firstScr');
+    const [statys, setStatys] = useState('firstRegScr');
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
     const [visitiesCountry, setVisitiesCountry] = useState([]);
-    //console.log('visitiesCountry', visitiesCountry)
     const [allData, setAllData] = useState(null);
+    console.log('allData =>', allData)
+    const [modalVisible, setModalVisible] = useState(false);
+    console.log('modalVisible', modalVisible)
 
-    
 
     const handleCountryPress = (country) => {
         // Перевіряємо, чи країна вже є в списку відвіданих
@@ -289,32 +286,33 @@ const HomeScreen = ({ navigation }) => {
     };
 
     const selectAllData = () => {
-        setAllData({ name, age, visitiesCountry });
-        console.log('allData =>', allData)
-    }
-
+        setAllData({ name: name.name, age: age.age, visitiesCountry: visitiesCountry });
+        setStatys('appScr')
+    };
+    
+    
     return (
 
         <View style={styles.conteiner}>
             
-            {statys === 'firstScr' && <View style={styles.cangeConteiner}>
+            {statys === 'firstRegScr' && <View style={styles.cangeConteiner}>
                 <Text>1_Hello!!!It's you'r personal travel blog.Tab Next to get started</Text>
                 
                 <TouchableOpacity
-                    onPress={() => setStatys('secondScr')}
+                    onPress={() => setStatys('secondRegScr')}
                     style={styles.btn}>
                     <Text style={styles.btnTitle}>Next</Text>
                 </TouchableOpacity>
             </View>}
             
-            {statys === 'secondScr' && <View style={styles.cangeConteiner}>
+            {statys === 'secondRegScr' && <View style={styles.cangeConteiner}>
                 <View style={styles.form}>
                     <View>
                         <Text>2_</Text>
                         <TextInput
                             style={styles.input}
                             placeholder='Enter you are name'
-                            onChangeText={(value) => setName((prev) => ({ ...prev, value }))}
+                            onChangeText={(name) => setName((prev) => ({ ...prev, name }))}
                         />
                     </View>
 
@@ -328,38 +326,38 @@ const HomeScreen = ({ navigation }) => {
 
                     <TouchableOpacity
                         disabled={name !== '' && age !== '' ? false : true}
-                        onPress={() => setStatys('tirdScr')}
+                        onPress={() => setStatys('tirdRegScr')}
                         style={styles.btn}>
                         <Text style={styles.btnTitle}>Next</Text>
                     </TouchableOpacity>
                 </View>
             </View>}
             
-            {statys === 'tirdScr' && <View style={styles.cangeConteiner}>
-                <ScrollView style={{marginHorizontal: 40}}>
-                    <Text style={{fontSize: 25, marginBottom: 20}}>3_What countries have you been to?</Text>
+            {statys === 'tirdRegScr' && <View style={styles.cangeConteiner}>
+                <ScrollView style={{}}>
+                    <Text style={{ fontSize: 25, marginBottom: 20 }}>3_What countries have you been to?</Text>
                     
                     <FlatList style={{ flex: 1, flexDirection: 'row' }}
                         data={countries}
                         keyExtractor={country => country.id}
                         renderItem={({ item }) =>
-                            <View style={ {}}>
+                            <View style={{}}>
                                 <TouchableOpacity
                                     style={{
                                         ...styles.countryItem,
                                         backgroundColor: visitiesCountry.some((i) => i.id === item.id) ? 'green' : '#fff'
                                            
-                                        }}
-                                    onPress={()=> handleCountryPress(item)}
-                                    >
+                                    }}
+                                    onPress={() => handleCountryPress(item)}
+                                >
                                     <Text style={{}}>{item.country}</Text>
                                 </TouchableOpacity>
                                 
                             </View>}
                     />
                     
-                    <TouchableOpacity 
-                        onPress={()=> selectAllData()}
+                    <TouchableOpacity
+                        onPress={() => selectAllData()}
                         style={styles.btn}
                     >
                         <Text style={styles.btnTitle}>Next</Text>
@@ -367,43 +365,111 @@ const HomeScreen = ({ navigation }) => {
                 </ScrollView>
                
             </View>}
+
+            {statys === 'appScr' && <View style={styles.cangeConteiner}>
+                      
+              
+
+                <View style={styles.modalCenteredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}>
+                        
+                        <View style={styles.modalCenteredView}>
+
+                            <View style={styles.modalView}>
+                                <Text>Name: {allData.name} </Text>
+                                <Text>Age: {allData.age} </Text>
+                                <Text>Countries in which I have been: </Text>
+                                <FlatList
+                                    data={visitiesCountry}
+                                    keyExtractor={visities => visities.id}
+                                    renderItem={({ item }) =>
+                                        <TouchableOpacity>
+                                            <Text>-{item.country}</Text>
+                                        </TouchableOpacity>} />
+
+                                <TouchableOpacity
+                                    style={[styles.modalButton, styles.modalButtonClose]}
+                                    onPress={() => setModalVisible(!modalVisible)}>
+                                    
+                                    <Text
+                                        style={styles.modalTextStyle}>Close</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+                    
+                    <TouchableOpacity
+                        style={[styles.modalButton, styles.modalButtonOpen]}
+                        onPress={() => { setModalVisible(true) }}>
+                        <Text style={styles.textStyle}>Open</Text>
+                    </TouchableOpacity>
+
+                </View>
+
+                <View>
+                    {visitiesCountry.map((country) => {
+                        return (
+                            <View key={country.id}>
+                                <Text>{visitiesCountry.indexOf(country) + 1}</Text>
+                                <Text>  Country: {country.country}</Text>
+                                <Text>  Capital: {country.capital}</Text>
+                                <TouchableOpacity style={{borderWidth: 1, borderRadius: 5}}>
+                                    <Text>  Add info +</Text>
+                                </TouchableOpacity>
+                            </View>
+                            
+                             )
+                         })}           
+                </View>
+                
+            </View>}
         </View>
         
+
     );
-}
-/*  <FlatList style={{ flex: 1, flexDirection: 'row' }}
-                        data={countries}
-                        keyExtractor={item => item.id}
+};
+/*   <View>
+                    <FlatList
+                        data={visitiesCountry}
+                        keyExtractor={(visity) => visity.id}
                         renderItem={({ item }) =>
-                            <View style={styles.countryItem}>
-                                <TouchableOpacity
-                                    style={styles.chekBox}
-                                    onPress={()=> setVisitiesCountry()}
-                                >
-                                    <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                                </TouchableOpacity>
-                                <Text style={styles.countryName}>{item.country}</Text>
-                            </View>} />*/
+                            <View>
+                                <Text>{visitiesCountry.indexOf(item) + 1}</Text>
+                                <Text>Country: {item.country}</Text>
+                                <Text>Capital: {item.capital}</Text>
+                            </View>}
+                    />
+                </View>
+                
+ <FlatList
+                                    data={visitiesCountry}
+                                    keyExtractor={visities => visities.id}
+                                    renderItem={({ item }) =>
+                                        <TouchableOpacity>
+                                            <Text>-{item.country}</Text>
+                                        </TouchableOpacity>} />               
+                */
 
 const styles = StyleSheet.create({
-conteiner: {
+    conteiner: {
         flex: 1,
-    
         backgroundColor: 'skyblue',
-        //position: 'relative',
         alignItems: 'center',
-        justifyContent: 'center',
-        
+        position: 'relative'
     },
     cangeConteiner: {
         marginTop: 50,
+        marginBottom: 50,
     },
     text: {
         marginTop: 100,
         fontSize: 20,
         
     },
-       btn: {
+    btn: {
         marginTop: 40,
         height: 40,
         borderRadius: 5,
@@ -427,24 +493,69 @@ conteiner: {
 
     },
     chekBox: {
-         width: 15,
-    height: 15,
-    backgroundColor: 'yellow', // Змініть колір кнопки на потрібний
-    marginRight: 8,
+        width: 15,
+        height: 15,
+        backgroundColor: 'yellow',
+        marginRight: 8,
         
     },
     chekBoxText: {
+        color: 'white',
+        textAlign: 'center',
+    },
+    countryItem: {
+        backgroundColor: 'white',
+        padding: 10,
+        margin: 5,
+    },
+    countryName: {
+        fontSize: 16,
+    },
+   
+    /////////////////////////////////////////////////////////////
+    modalCenteredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalButton: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  modalButtonOpen: {
+      backgroundColor: '#F194FF',
+      position: 'absolute',
+      top: 0
+  },
+  modalButtonClose: {
+      backgroundColor: '#2196F3',
+      
+  },
+  modalTextStyle: {
     color: 'white',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
-    countryItem: {
-    backgroundColor: 'white',
-    padding: 10,
-    margin: 5,
-  },
-  countryName: {
-    fontSize: 16,
-    // Інші стилі тексту для назви країни
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
     
@@ -452,110 +563,3 @@ conteiner: {
 export default HomeScreen;
 
 
-/* 
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}
-                            onPress={()=> setVisitiesCountry([...visitiesCountry, {id: 1, country: 'Spain'}])}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>Spain</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}
-                            onPress={()=> setVisitiesCountry([...visitiesCountry, {id: 2, country: 'France'}])}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>France</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>Italy</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>Greece</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>Japan</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>Thailand</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>Mexico</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>Australia</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>Egypt</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>India</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>Brazil</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>Canada</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>South Africa</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>New Zealand</Text>
-                    </View>
-
-                    <View style={styles.countryItem}>
-                        <TouchableOpacity style={styles.chekBox}>
-                            <Text style={styles.chekBoxText}>{'\u25A0'}</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.countryName}>United States</Text>
-                    </View>*/
