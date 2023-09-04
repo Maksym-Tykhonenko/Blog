@@ -12,7 +12,8 @@ import {
     Button,
     FlatList,
     SafeAreaView,
-    ScrollView
+    ScrollView,
+    Alert
 } from 'react-native';
 
 
@@ -265,7 +266,8 @@ const HomeScreen = ({ navigation }) => {
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
     const [visitiesCountry, setVisitiesCountry] = useState([]);
-    console.log('visitiesCountry', visitiesCountry)
+    //console.log('visitiesCountry', visitiesCountry)
+    const [allData, setAllData] = useState(null);
 
     
 
@@ -285,6 +287,11 @@ const HomeScreen = ({ navigation }) => {
             setVisitiesCountry([...visitiesCountry, country]);
         }
     };
+
+    const selectAllData = () => {
+        setAllData({ name, age, visitiesCountry });
+        console.log('allData =>', allData)
+    }
 
     return (
 
@@ -351,7 +358,9 @@ const HomeScreen = ({ navigation }) => {
                             </View>}
                     />
                     
-                    <TouchableOpacity style={styles.btn}
+                    <TouchableOpacity 
+                        onPress={()=> selectAllData()}
+                        style={styles.btn}
                     >
                         <Text style={styles.btnTitle}>Next</Text>
                     </TouchableOpacity>
