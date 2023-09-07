@@ -49,14 +49,18 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 
 	<key>NSCameraUsageDescription</key>
-<string>$(PRODUCT_NAME) needs access to your Camera.</string>
+<string>Requirement: Capture Image</string>
 
 <!-- optionally, if you want to record audio: -->
 <key>NSMicrophoneUsageDescription</key>
-<string>$(PRODUCT_NAME) needs access to your Microphone.</string>
+<string>Requirement: Capture Video</string>
+
+<key>NSPhotoLibraryUsageDescription</key>
+	<string>Requirement: Select image/video from photos</string>
 </dict>
 </plist>

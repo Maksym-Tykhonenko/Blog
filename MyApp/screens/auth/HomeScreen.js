@@ -14,6 +14,10 @@ import {
     Alert
 } from 'react-native';
 
+import PhotoScreen from '../main/PhotoScreen';
+import AddCountry from './AddCounry';
+
+
 
 //можливо сюди відправляти данні юзера
 // import AsyncStorage from '@react-native-async-storage/async-storage' 
@@ -418,6 +422,8 @@ const HomeScreen = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     // стан мадалки для додавання нових категорій
     const [addInfoModalVisible, setAddInfoModalVisible] = useState(false);
+    // стан мадалки для додавання нових краін
+    const [addModalVisitiesCountry, setAddModalVisitiesCountry] = useState(false);
     //стан 
     const [selectedCountry, setSelectedCountry] = useState(null);
 
@@ -463,192 +469,295 @@ const HomeScreen = ({ navigation }) => {
     
     return (
 
-            <View style={styles.conteiner}>
+        <View style={styles.conteiner}>
             
             
-                {statys === 'firstRegScr' && <View style={{}}>
-                    <Text style={{ fontSize: 25, marginBottom: 150, marginTop: 50 }}>Hello!!!It's you'r personal travel blog.Tab Next to get started</Text>
+            {statys === 'firstRegScr' && <View style={{}}>
+                <Text style={{ fontSize: 25, marginBottom: 150, marginTop: 50 }}>Hello!!!It's you'r personal travel blog.Tab Next to get started</Text>
                 
-                    <TouchableOpacity
-                        onPress={() => setStatys('secondRegScr')}
-                        style={styles.btn}>
-                        <Text style={styles.btnTitle}>Next</Text>
-                    </TouchableOpacity>
-                </View>}
+                <TouchableOpacity
+                    onPress={() => setStatys('secondRegScr')}
+                    style={styles.btn}>
+                    <Text style={styles.btnTitle}>Next</Text>
+                </TouchableOpacity>
+            </View>}
             
-                {statys === 'secondRegScr' && <View style={{}}>
-                    <View style={{ marginTop: 50 }}>
+            {statys === 'secondRegScr' && <View style={{}}>
+                <View style={{ marginTop: 50 }}>
                         
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Enter you are name'
-                            onChangeText={(name) => setName((prev) => ({ ...prev, name }))}
-                        />
-                    </View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Enter you are name'
+                        onChangeText={(name) => setName((prev) => ({ ...prev, name }))}
+                    />
+                </View>
 
-                    <View style={{ marginTop: 20, marginBottom: 50 }}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder='Enter you are age'
-                            onChangeText={(age) => setAge((prev) => ({ ...prev, age }))}
-                        />
-                    </View>
+                <View style={{ marginTop: 20, marginBottom: 50 }}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Enter you are age'
+                        onChangeText={(age) => setAge((prev) => ({ ...prev, age }))}
+                    />
+                </View>
 
-                    <TouchableOpacity
-                        disabled={name !== '' && age !== '' ? false : true}
-                        onPress={() => setStatys('tirdRegScr')}
-                        style={styles.btn}>
-                        <Text style={styles.btnTitle}>Next</Text>
-                    </TouchableOpacity>
-                </View>}
+                <TouchableOpacity
+                    disabled={name !== '' && age !== '' ? false : true}
+                    onPress={() => setStatys('tirdRegScr')}
+                    style={styles.btn}>
+                    <Text style={styles.btnTitle}>Next</Text>
+                </TouchableOpacity>
+            </View>}
             
-                {statys === 'tirdRegScr' && <View style={styles.cangeConteiner}>
-                    <ScrollView style={{}}>
-                        <Text style={{ fontSize: 25, marginBottom: 20 }}>3_What countries have you been to?</Text>
+            {statys === 'tirdRegScr' && <View style={styles.cangeConteiner}>
+                <ScrollView style={{}}>
+                    <Text style={{ fontSize: 25, marginBottom: 20 }}>3_What countries have you been to?</Text>
                     
-                        {countries.map((country) => {
-                            return (
-                                <View key={country.id}>
-                                    <TouchableOpacity
-                                        style={{
-                                            ...styles.countryItem,
-                                            backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? 'green' : '#fff'
+                    {countries.map((country) => {
+                        return (
+                            <View key={country.id}>
+                                <TouchableOpacity
+                                    style={{
+                                        ...styles.countryItem,
+                                        backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? 'green' : '#fff'
                                            
-                                        }}
-                                        onPress={() => handleCountryPress(country)}
-                                    >
-                                        <Text>{country.country}</Text>
-                                    </TouchableOpacity>
+                                    }}
+                                    onPress={() => handleCountryPress(country)}
+                                >
+                                    <Text>{country.country}</Text>
+                                </TouchableOpacity>
                                 
-                                </View>
-                            )
-                        })}
+                            </View>
+                        )
+                    })}
                     
-                        <TouchableOpacity
-                            onPress={() => selectAllData()}
-                            style={styles.btn}
-                        >
-                            <Text style={styles.btnTitle}>Next</Text>
-                        </TouchableOpacity>
-                    </ScrollView>
+                    <TouchableOpacity
+                        onPress={() => selectAllData()}
+                        style={styles.btn}
+                    >
+                        <Text style={styles.btnTitle}>Next</Text>
+                    </TouchableOpacity>
+                </ScrollView>
                
-                </View>}
+            </View>}
 
-                {statys === 'appScr' && <View style={{ flex: 1 }}>
-                      
-                    <View style={styles.modalCenteredView}>
-                        <Modal
-                            animationType="slide"
-                            transparent={true}
-                            visible={modalVisible}>
+            {statys === 'appScr' && <View style={{ flex: 1 }}>
+                {/**Модалка з інфою юзера */}
+                <View style={styles.modalCenteredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}>
                         
-                            <View style={styles.modalCenteredView}>
+                        <View style={styles.modalCenteredView}>
 
-                                <View style={styles.modalView}>
-                                    <Image style={{ width: 80, height: 80, marginBottom: 10 }} source={require('../../accets/25345e8510eeaab262dcaf3c56c57f30.jpg')} />
-                                    <Text style={{ marginBottom: 8, fontSize: 17 }}><Text style={styles.modalText}>Name:</Text> {allData.name} </Text>
-                                    <Text style={{ marginBottom: 8, fontSize: 17 }}><Text style={styles.modalText}>Age:</Text> {allData.age} </Text>
-                                    <Text style={{ marginBottom: 8, fontSize: 17 }}><Text style={styles.modalText}>Total Visited:</Text> {visitiesCountry.length} </Text>
-                                    <Text style={{ ...styles.modalText, marginBottom: 8 }}>Countries in which I have been: </Text>
-                                    <FlatList
-                                        data={visitiesCountry}
-                                        keyExtractor={visities => visities.id}
-                                        renderItem={({ item }) =>
-                                            <TouchableOpacity>
-                                                <Text style={{ marginBottom: 6, fontSize: 15 }} >-{item.country}</Text>
-                                            </TouchableOpacity>} />
+                            <View style={styles.modalView}>
+                                <Image style={{ width: 80, height: 80, marginBottom: 10 }} source={require('../../accets/25345e8510eeaab262dcaf3c56c57f30.jpg')} />
+                                <Text style={{ marginBottom: 8, fontSize: 17 }}><Text style={styles.modalText}>Name:</Text> {allData.name} </Text>
+                                <Text style={{ marginBottom: 8, fontSize: 17 }}><Text style={styles.modalText}>Age:</Text> {allData.age} </Text>
+                                <Text style={{ marginBottom: 8, fontSize: 17 }}><Text style={styles.modalText}>Total Visited:</Text> {visitiesCountry.length} </Text>
+                                <Text style={{ ...styles.modalText, marginBottom: 8 }}>Countries in which I have been: </Text>
+                                <FlatList
+                                    data={visitiesCountry}
+                                    keyExtractor={visities => visities.id}
+                                    renderItem={({ item }) =>
+                                        <TouchableOpacity>
+                                            <Text style={{ marginBottom: 6, fontSize: 15 }} >-{item.country}</Text>
+                                        </TouchableOpacity>} />
 
-                                    <TouchableOpacity
-                                        style={{ ...styles.modalButton, ...styles.modalButtonClose }}
-                                        onPress={() => setModalVisible(!modalVisible)}>
-                                        <Text
-                                            style={styles.modalTextStyle}>X
-                                        </Text>
-                                    </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{ ...styles.modalButton, ...styles.modalButtonClose }}
+                                    onPress={() => setModalVisible(!modalVisible)}>
+                                    <Text
+                                        style={styles.modalTextStyle}>X
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+                    
+                </View>
+
+                {/**модалка для додавання краін */}
+                <View style={styles.modalCenteredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={addModalVisitiesCountry}>
+                        
+                        <View style={styles.modalCenteredView}>
+
+                            <View style={styles.modalView}>
+                               
+                                <ScrollView>
+                                    <Text style={{ fontSize: 25, marginBottom: 20 }}>What countries have you been to?</Text>
+
+                                    {countries.map((country) => {
+                                        return (
+                                            <View key={country.id}>
+                                                <TouchableOpacity
+                                                    style={{
+                                                        ...styles.countryItem,
+                                                        backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? 'green' : '#fff'
+                                           
+                                                    }}
+                                                    onPress={() => handleCountryPress(country)}
+                                                >
+                                                    <Text>{country.country}</Text>
+                                                </TouchableOpacity>
+                                
+                                            </View>
+                                        );
+                                    })}
+
+                                </ScrollView>
+
+                                
+                                <View style={{justifyContent: 'center', marginLeft: 110}}>
+
+                                <TouchableOpacity
+                                    style={{
+                                        ...styles.modalButton, backgroundColor: '#dcdcdc',width: 40,
+                                        height: 40,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderRadius: 3,
+                                        shadowColor: '#000',
+                                        shadowOffset: {
+                                            width: 0,
+                                            height: 2,
+                                        },
+                                        shadowOpacity: 0.25,
+                                        shadowRadius: 4,
+                                        elevation: 5,
+                                    }}
+                                    onPress={() => { setAddModalVisitiesCountry(false) }}>
+                                    <Text
+                                        style={styles.modalTextStyle}>X
+                                    </Text>
+                                </TouchableOpacity>
                                 </View>
                             </View>
-                        </Modal>
+                        </View>
+                    </Modal>
                     
-                    </View>
+                </View>
 
-                    {/* кнопка для відкриття модалки з інфою юзера */}
-                    <View style={{ marginBottom: 5, }}>
-                        <TouchableOpacity
-                            style={{ ...styles.modalButton, ...styles.modalButtonOpen }}
-                            onPress={() => { setModalVisible(true) }}>
-                            <Text style={{ fontWeight: 'bold' }}>|{''}|{''}|</Text>
+                {/* кнопки для відкриття модалки з інфою юзера та мод для додавання краін */}
+                <View style={{ marginBottom: 15, flexDirection: 'row', justifyContent: 'space-evenly' }}>
 
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity
+                        style={{ ...styles.modalButton, ...styles.modalButtonOpen }}
+                        onPress={() => { setModalVisible(true) }}>
+                        <Text style={{ fontWeight: 'bold' }}>|{''}|{''}|</Text>
 
-                    <ScrollView>
-                        {visitiesCountry.map((country) => {
-                            return (
-                                <View
-                                    style={{ justifyContent: 'center', paddingLeft: 5, paddingBottom: 5, marginBottom: 5, borderWidth: 1, borderRadius: 5, borderColor: 'green' }}
-                                    key={country.id}>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{ ...styles.modalButton, ...styles.modalButtonOpen }}
+                        onPress={() => { setAddModalVisitiesCountry(true) }}>
+                        <Text style={{ fontWeight: 'bold' }}>{''}+{''}</Text>
+
+                    </TouchableOpacity>
+                </View>
+               
+
+                <ScrollView>
+                    {visitiesCountry.map((country) => {
+                        return (
+                            <View
+                                style={{
+                                    justifyContent: 'center', paddingLeft: 5, paddingBottom: 5, marginBottom: 5, borderRadius: 15, backgroundColor: '#f0e68c', shadowColor: '#000',
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 2,
+                                    },
+                                    shadowOpacity: 0.25,
+                                    shadowRadius: 4,
+                                    elevation: 5,
+                                }}
+                                key={country.id}>
                                
-                                    <Text><Text style={{ fontWeight: 'bold' }}>Country:</Text>{' '}{country.country}</Text>
-                                    <Text><Text style={{ fontWeight: 'bold' }}>Capital:</Text>{' '}{country.capital}</Text>
-                                    <Text><Text style={{ fontWeight: 'bold' }}>Best national dish:</Text>{' '}{country.BestNationalDish}</Text>
-                                    <Text><Text style={{ fontWeight: 'bold' }}>Best sightseeing:</Text>{' '}{country.BestSightseeing}</Text>
-                                    {country.info && <View style={{ borderWidth: 1, borderRadius: 5, padding: 2, marginRight: 7, marginBottom: 7, borderColor: '#daa520' }}><Text style={{ fontWeight: 'bold' }}>My notes about this country:</Text><Text style={{ paddingLeft: 7, paddingRight: 7 }}>{country.info}</Text></View>}
+                                <Text><Text style={{ fontWeight: 'bold' }}>Country:</Text>{' '}{country.country}</Text>
+                                <Text><Text style={{ fontWeight: 'bold' }}>Capital:</Text>{' '}{country.capital}</Text>
+                                <Text><Text style={{ fontWeight: 'bold' }}>Best national dish:</Text>{' '}{country.BestNationalDish}</Text>
+                                <Text><Text style={{ fontWeight: 'bold' }}>Best sightseeing:</Text>{' '}{country.BestSightseeing}</Text>
+                                {country.info && <View style={{
+                                    borderRadius: 5, padding: 2, marginRight: 7, marginBottom: 7, backgroundColor: '#fff8dc', shadowColor: '#000',
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 2,
+                                    },
+                                    shadowOpacity: 0.25,
+                                    shadowRadius: 4,
+                                    elevation: 5,
+                                }}><Text style={{ fontWeight: 'bold' }}>My notes about this country:</Text><Text style={{ paddingLeft: 7, paddingRight: 7 }}>{country.info}</Text></View>}
                                 
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            setSelectedCountry(country);
-                                            setAddInfoModalVisible(true);
-                                        
-                                        }}
-                                        style={styles.addInfoModal}>
-                                        <Text>Add info +</Text>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setSelectedCountry(country);
+                                        setAddInfoModalVisible(true);
+                                        setInform('')
+                                    }}
+                                    style={styles.addInfoModal}>
+                                    <Text>Add info +</Text>
                                     
-                                    </TouchableOpacity>
+                                </TouchableOpacity>
 
-                                    <View style={styles.modalCenteredView}>
-                                        <Modal
-                                            animationType='fade'
-                                            transparent={true}
-                                            visible={addInfoModalVisible}
-                                        >
-                                            <View style={styles.modalCenteredView}>
-                                                <View style={styles.modalView}>
-                                                    <TouchableOpacity
-                                                        onPress={() => setAddInfoModalVisible(false)}
-                                                        style={{ backgroundColor: 'red', borderRadius: 20, padding: 10, width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
-                                                        <Text style={{ ...styles.modalTextStyle, top: 0 }}>X</Text>
-                                                    </TouchableOpacity>
+                                <View style={styles.modalCenteredView}>
+                                    <Modal
+                                        animationType='fade'
+                                        transparent={true}
+                                        visible={addInfoModalVisible}
+                                    >
+                                        <View style={styles.modalCenteredView}>
+                                            <View style={styles.modalView}>
+                                                <TouchableOpacity
+                                                    onPress={() => setAddInfoModalVisible(false)}
+                                                    style={{
+                                                        backgroundColor: 'red', borderRadius: 20, padding: 10, marginBottom: 10, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', shadowColor: '#000',
+                                                        shadowOffset: {
+                                                            width: 0,
+                                                            height: 2,
+                                                        },
+                                                        shadowOpacity: 0.25,
+                                                        shadowRadius: 4,
+                                                        elevation: 5,
+                                                    }}>
+                                                    <Text style={{ ...styles.modalTextStyle, top: 0 }}>X</Text>
+                                                </TouchableOpacity>
 
-                                                    <Text>Add you'r notes for {selectedCountry?.country}:</Text>
+                                                <Text style={{ marginBottom: 10, fontSize: 15 }}>Add you'r notes for <Text style={{ fontWeight: 'bold' }}>{selectedCountry?.country}:</Text></Text>
                                                 
-                                                    <TextInput
-                                                        style={{ ...styles.input, marginBottom: 10, }}
-                                                        placeholder='Add a note'
-                                                        onChangeText={(text) => setInform(text)}
-                                                        value={inform}
-                                                    />
-                                                    {/*   onPress={()=> Alert.alert('add info')} */}
-                                                    <TouchableOpacity
-                                                        onPress={handleAddInfo}
-                                                        style={styles.addInfoModal}
-                                                    >
-                                                        <Text>ADD +</Text>
-                                                    </TouchableOpacity>
-                                                </View>
+                                                <TextInput
+                                                    style={{ ...styles.input, marginBottom: 10, }}
+                                                    placeholder='Add a note'
+                                                    onChangeText={(text) => setInform(text)}
+                                                    value={inform}
+                                                />
+                                                {/*   onPress={()=> Alert.alert('add info')} */}
+                                                <TouchableOpacity
+                                                    onPress={handleAddInfo}
+                                                    style={styles.addInfoModal}
+                                                >
+                                                    <Text>ADD +</Text>
+                                                </TouchableOpacity>
                                             </View>
-                                        </Modal>
-                                    </View>
-
-
+                                        </View>
+                                    </Modal>
                                 </View>
+
+
+                            </View>
                             
-                            )
-                        })}
-                    </ScrollView>
+                        )
+                    })}
+                </ScrollView>
                 
-                </View>}
+            </View>}
+            
+            {statys === 'addPhoto' && <PhotoScreen />}
                 
-            </View>
+        </View>
     );
 };             
 
@@ -656,7 +765,9 @@ const styles = StyleSheet.create({
     conteiner: {
         flex: 1,
         marginHorizontal: 20,
-        marginVertical: 50,
+        //marginVertical: 50,
+        marginBottom: 20,
+        marginTop: 20,
         alignItems: 'center',
         position: 'relative',
     },
@@ -667,7 +778,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#228b22',
-        marginHorizontal: 60
+        marginHorizontal: 60,
+         shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     btnTitle: {
         fontSize: 18,
@@ -692,6 +811,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 10,
         margin: 5,
+        borderRadius: 5,
+         shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
    
     /////////////////////////////////////////////////////////////
@@ -767,13 +895,21 @@ const styles = StyleSheet.create({
     ///////////////////////////
     addInfoModal: {
         backgroundColor: 'green',
-         borderWidth: 1,
          borderRadius: 5,
          width: 100,
          justifyContent: 'center',
          alignItems: 'center',
-         paddingTop: 3,
-         paddingBottom: 3
+         paddingTop: 5,
+        paddingBottom: 5,
+        marginTop: 10,
+          shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
 
     },
 
