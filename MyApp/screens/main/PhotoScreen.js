@@ -1,48 +1,58 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, Alert, Button, FlatList, } from 'react-native';
 
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-
+import axios from 'axios';
 
 
 const PhotoScreen = () => {
 
-  const [selectImg, setSelectImg] = useState('');
-
-
-  const openCamera = async () => {
-
-    const resultCamera = await launchCamera({mediaType: 'photo', quality:0});
-    
-  };
+const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(false);
   
-  const openGallery = async () => {
 
-    const resultGallery = await launchImageLibrary({mediaType: 'photo', });
-    console.log(resultGallery)
+
+  const fields = 'name,capital,population,flags,languages';
+//?fields=${fields}
+  const fetchCountries = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`https://restcountries.com/v3.1//region/america`);
+      const data = response.data;
+      setCountries(data);
+      console.log('population',countries.population)
+    } catch (error) {
+      console.error('Помилка запиту:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <SafeAreaView style={styles.conteiner}>
-      <View style={{ height: 400, width: '100%' }}>
-        <Image style={{ height: 400, width: '100%' }} source={{}} />
-      </View>
+    <View>
+      <Button title="Пошук країн" onPress={fetchCountries} />
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <FlatList
+          data={countries}
+          keyExtractor={(item) => item.cca3}
+          renderItem={({ item }) => (
+            <View style={{ borderWidth: 1, marginBottom: 3 }}>
+             
+              <Text>Country: {item.name.common}</Text>
+              <Text>Capital: {item.capital}</Text>
 
-      {/*  */}
-      <TouchableOpacity style={styles.btnCam}
-        onPress={openCamera}>
-        <Text style={styles.textCam}>Gallery</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.btnCam}
-        onPress={openGallery}>
-        <Text style={styles.textCam}>Camera</Text>
-      </TouchableOpacity>
-      
-      
-      
-    </SafeAreaView>
+             
+             
+              {/* Додайте інші дані про країну, які вам потрібні */}
+            </View>
+          )}
+        />
+      )}
+    </View>
   );
+
 };
 
 const styles = StyleSheet.create({
@@ -64,7 +74,24 @@ const styles = StyleSheet.create({
   textCam: {
     fontSize: 20,
     color: '#fff'
-  }
+  },
+  ///////////////////////
+   countryItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  flag: {
+    width: 30,
+    height: 20,
+    marginRight: 10,
+  },
+  countryInfo: {
+    flex: 1,
+  },
+  countryName: {
+    fontWeight: 'bold',
+  },
 });
 
 

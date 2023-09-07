@@ -24,6 +24,198 @@ import AddCountry from './AddCounry';
 
 const countries = [
     {
+        id: 48,
+        country: "Canada",
+        capital: "Ottawa",
+        BestNationalDish: "Poutine",
+        BestSightseeing: "Banff National Park",
+        info: '',
+    },
+    {
+        id: 49,
+        country: "United States of America",
+        capital: "Washington, D.C.",
+        BestNationalDish: "Hamburger",
+        BestSightseeing: "Grand Canyon",
+        info: '',
+    },
+    {
+        id: 50,
+        country: "Mexico",
+        capital: "Mexico City",
+        BestNationalDish: "Tacos",
+        BestSightseeing: "Chichen Itza",
+        info: '',
+    },
+    {
+        id: 51,
+        country: "The Bahamas",
+        capital: "Nassau",
+        BestNationalDish: "Conch Salad",
+        BestSightseeing: "Exuma Cays",
+        info: '',
+    },
+    {
+        id: 52,
+        country: "Barbados",
+        capital: "Bridgetown",
+        BestNationalDish: "Cou-Cou and Flying Fish",
+        BestSightseeing: "Harrison's Cave",
+        info: '',
+    },
+    {
+        id: 53,
+        country: "Belize",
+        capital: "Belmopan",
+        BestNationalDish: "Rice and Beans with Stew Chicken",
+        BestSightseeing: "Great Blue Hole",
+        info: '',
+    },
+    {
+        id: 54,
+        country: "Haiti",
+        capital: "Port-au-Prince",
+        BestNationalDish: " Griot and Pikliz",
+        BestSightseeing: "Citadelle Laferrière",
+        info: '',
+    },
+    {
+        id: 55,
+        country: "Guyana",
+        country: "Guyana",
+        capital: "Georgetown",
+        BestNationalDish: "Pepperpot",
+        BestSightseeing: "Kaieteur Falls",
+        info: '',
+    },
+    {
+        id: 56,
+        country: "Honduras",
+        capital: "Tegucigalpa",
+        BestNationalDish: "Baleadas",
+        BestSightseeing: "Copán Ruins",
+        info: '',
+    },
+    {
+        id: 57,
+        country: "Grenada",
+        capital: "St. George's",
+        BestNationalDish: "Oil Down",
+        BestSightseeing: "Grand Anse Beach",
+        info: '',
+    },
+    {
+        id: 58,
+        country: "Dominica",
+        capital: "Roseau",
+        BestNationalDish: "Callaloo Soup",
+        BestSightseeing: "Boiling Lake",
+
+        info: '',
+    },
+    {
+        id: 59,
+        country: "Dominican Republic",
+        capital: "Santo Domingo",
+        BestNationalDish: "Mangú",
+        BestSightseeing: "Punta Cana",
+
+        info: '',
+    },
+    {
+        id: 60,
+        country: "Costa Rica",
+        capital: "San José",
+        BestNationalDish: "Gallo Pinto",
+        BestSightseeing: "Arenal Volcano",
+        info: '',
+    },
+    {
+        id: 61,
+        country: "Cuba",
+        capital: "Havana",
+        BestNationalDish: "Ropa Vieja",
+        BestSightseeing: "Old Havana",
+
+        info: '',
+    },
+    {
+        id: 62,
+        country: "Nicaragua",
+        capital: "Managua",
+        BestNationalDish: "Gallo Pinto",
+        BestSightseeing: "Ometepe Island",
+        info: '',
+    },
+    {
+        id: 63,
+        country: "Panama",
+        capital: "Panama City",
+        BestNationalDish: "Sancocho",
+        BestSightseeing: "Panama Canal",
+        info: '',
+    },
+    {
+        id: 64,
+        country: "Saint Kitts and Nevis",
+        capital: "Basseterre",
+        BestNationalDish: "Saltfish and Johnny Cakes",
+        BestSightseeing: "Brimstone Hill Fortress",
+
+        info: '',
+    },
+    {
+        id: 65,
+        country: "Saint Lucia",
+        capital: "Castries",
+        BestNationalDish: "Green Fig and Saltfish",
+        BestSightseeing: "Pitons",
+        info: '',
+    },
+    {
+        id: 66,
+        country: "Saint Vincent and the Grenadines",
+        capital: "Kingstown",
+        BestNationalDish: "Roasted Breadfruit and Fried Jackfish",
+        BestSightseeing: "Tobago Cays",
+        info: '',
+    },
+    {
+        id: 67,
+        country: "Trinidad and Tobago",
+        capital: "Port of Spain",
+        BestNationalDish: "Roti",
+        BestSightseeing: "Maracas Beach",
+
+        info: '',
+    },
+    {
+        id: 68,
+        country: "Jamaica",
+        capital: "Kingston",
+        BestNationalDish: "Jerk Chicken",
+        BestSightseeing: "Dunn's River Falls",
+
+        info: '',
+    },
+    {
+        id: 69,
+        country: "El Salvador",
+        capital: "San Salvador",
+        BestNationalDish: "Pupusas",
+        BestSightseeing: "Ruta de las Flores",
+
+        info: '',
+    },
+    {
+        id: 70,
+        country: "Guatemala",
+        capital: "Guatemala City",
+        BestNationalDish: "Pepián",
+        BestSightseeing: "Tikal National Park",
+        info: '',
+    },
+    {
         id: 1,
         country: "Albania",
         capital: "Tirana",
@@ -510,7 +702,7 @@ const HomeScreen = ({ navigation }) => {
             
             {statys === 'tirdRegScr' && <View style={styles.cangeConteiner}>
                 <ScrollView style={{}}>
-                    <Text style={{ fontSize: 25, marginBottom: 20 }}>3_What countries have you been to?</Text>
+                    <Text style={{ fontSize: 25, marginBottom: 20, marginTop: 20 }}>What countries have you been to?</Text>
                     
                     {countries.map((country) => {
                         return (
@@ -540,7 +732,7 @@ const HomeScreen = ({ navigation }) => {
                
             </View>}
 
-            {statys === 'appScr' && <View style={{ flex: 1 }}>
+            {statys === 'appScr' && <View style={{ flex: 1 , }}>
                 {/**Модалка з інфою юзера */}
                 <View style={styles.modalCenteredView}>
                     <Modal
@@ -612,7 +804,7 @@ const HomeScreen = ({ navigation }) => {
                                 </ScrollView>
 
                                 
-                                <View style={{justifyContent: 'center', marginLeft: 110}}>
+                                <View style={{justifyContent: 'center', marginLeft: 100}}>
 
                                 <TouchableOpacity
                                     style={{
