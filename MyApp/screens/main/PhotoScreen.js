@@ -2,55 +2,75 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, Alert, Button, FlatList, } from 'react-native';
 
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import axios from 'axios';
 
 
 const PhotoScreen = () => {
 
-const [countries, setCountries] = useState([]);
-  const [loading, setLoading] = useState(false);
-  
+  const [selectImg, setSelectImg] = useState(null);
 
-
-  const fields = 'name,capital,population,flags,languages';
-//?fields=${fields}
-  const fetchCountries = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`https://restcountries.com/v3.1//region/america`);
-      const data = response.data;
-      setCountries(data);
-      console.log('population',countries.population)
-    } catch (error) {
-      console.error('Помилка запиту:', error);
-    } finally {
-      setLoading(false);
-    }
+  const imagePicker = () => {
+    
+    let options = {
+      storageOptions: {
+        path: 'image'
+      }
+    };
+    
+    launchImageLibrary(options, response => {
+      console.log('response ==>', response.assets[0].uri);
+      setSelectImg(response.assets[0].uri)
+    })
   };
 
-  return (
-    <View>
-      <Button title="Пошук країн" onPress={fetchCountries} />
-      {loading ? (
-        <Text>Loading...</Text>
-      ) : (
-        <FlatList
-          data={countries}
-          keyExtractor={(item) => item.cca3}
-          renderItem={({ item }) => (
-            <View style={{ borderWidth: 1, marginBottom: 3 }}>
-             
-              <Text>Country: {item.name.common}</Text>
-              <Text>Capital: {item.capital}</Text>
+  const photoPicker = () => {
+    let options = {
+      storageOptions: {
+        path: 'photo'
+      }
+    };
 
-             
-             
-              {/* Додайте інші дані про країну, які вам потрібні */}
-            </View>
-          )}
-        />
-      )}
-    </View>
+    launchCamera(options, response => {
+      console.log("response", response )
+    })
+
+  };
+//вертікаль   justifyContent: 'center' 
+//горизонталь  justifyContent: 'center'     
+
+     //
+  
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ height: 400, width: 400, justifyContent: 'center', justifyContent: 'center' }}>
+        
+        {selectImg ? (<Image
+          source={{ uri: selectImg }}
+          style={{ width: 300, height: 300, alignSelf: 'center', borderRadius: 150, }} />) : (<Image
+            source={require('../../accets/user.png')}
+            style={{ width: 300, height: 300, }} />)}
+        
+      </View>
+   
+      <TouchableOpacity
+        onPress={() => {
+          imagePicker();
+        }}
+        style={{
+          marginTop: 20, height: 50, width: 150, backgroundColor: 'green', borderRadius: 50, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 4,
+          elevation: 5,
+        }}
+      >
+        <Text style={{ fontSize: 15 }}>Select Photo</Text>
+      </TouchableOpacity>
+        
+      
+    </SafeAreaView>
   );
 
 };
@@ -96,3 +116,49 @@ const styles = StyleSheet.create({
 
 
 export default PhotoScreen;
+
+
+  //const [countries, setCountries] = useState([]);
+  //  const [loading, setLoading] = useState(false);
+  //  
+  //  const fields = 'name,capital,population,flags,languages';
+  //?fields=${fields}
+  //  const fetchCountries = async () => {
+  //    setLoading(true);
+  //    try {
+  //      const response = await axios.get(`https://restcountries.com/v3.1//region/america`);
+  //      const data = response.data;
+  //      setCountries(data);
+  //      console.log('population',countries.population)
+  //    } catch (error) {
+  //      console.error('Помилка запиту:', error);
+  //    } finally {
+  //      setLoading(false);
+  //    }
+  //  };
+  //
+  //  return (
+  //    <View>
+  //      <Button title="Пошук країн" onPress={fetchCountries} />
+  //      {loading ? (
+  //        <Text>Loading...</Text>
+  //      ) : (
+  //        <FlatList
+  //          data={countries}
+  //          keyExtractor={(item) => item.cca3}
+  //          renderItem={({ item }) => (
+  //            <View style={{ borderWidth: 1, marginBottom: 3 }}>
+  //             
+  //              <Text>Country: {item.name.common}</Text>
+  //              <Text>Capital: {item.capital}</Text>
+  //
+  //             
+  //             
+  //              {/* Додайте інші дані про країну, які вам потрібні */}
+  //            </View>
+  //          )}
+  //        />
+  //      )}
+  //    </View>
+  //  );
+  //

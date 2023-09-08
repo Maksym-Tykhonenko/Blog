@@ -11,8 +11,10 @@ import {
     ScrollView,
     Modal,
     Pressable,
-    Alert
+    Alert,
+    SafeAreaView
 } from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 import PhotoScreen from '../main/PhotoScreen';
 import AddCountry from './AddCounry';
@@ -606,10 +608,10 @@ const HomeScreen = ({ navigation }) => {
     const [visitiesCountry, setVisitiesCountry] = useState([]);
     //стан інфи яку юзер сам заповнює про краіни в яких він був
     const [inform, setInform] = useState('')
-    console.log('inform',inform)
+    //console.log('inform',inform)
     //стан всіх данних юзера
     const [allData, setAllData] = useState(null);
-    console.log('allData =>', allData)
+    //console.log('allData =>', allData)
     // стан мадалки данних юзера
     const [modalVisible, setModalVisible] = useState(false);
     // стан мадалки для додавання нових категорій
@@ -618,6 +620,8 @@ const HomeScreen = ({ navigation }) => {
     const [addModalVisitiesCountry, setAddModalVisitiesCountry] = useState(false);
     //стан 
     const [selectedCountry, setSelectedCountry] = useState(null);
+    //стейт фото аватаркі
+    const [selectImg, setSelectImg] = useState(null);
 
 
     const handleCountryPress = (country) => {
@@ -659,6 +663,22 @@ const HomeScreen = ({ navigation }) => {
         }
     };
     
+
+    const imagePicker = () => {
+    
+        let options = {
+            storageOptions: {
+                path: 'image'
+            }
+        };
+    
+        launchImageLibrary(options, response => {
+            console.log('response ==>', response.assets[0].uri);
+            setSelectImg(response.assets[0].uri)
+        })
+    };
+
+
     return (
 
         <View style={styles.conteiner}>
@@ -694,12 +714,55 @@ const HomeScreen = ({ navigation }) => {
 
                 <TouchableOpacity
                     disabled={name !== '' && age !== '' ? false : true}
-                    onPress={() => setStatys('tirdRegScr')}
+                    onPress={() => setStatys('addPhoto')}
                     style={styles.btn}>
                     <Text style={styles.btnTitle}>Next</Text>
                 </TouchableOpacity>
             </View>}
-            
+
+            {statys === 'addPhoto' && <SafeAreaView style={{ flex: 1 }}>
+                <View style={{ height: 400, width: 400, justifyContent: 'center', justifyContent: 'center' }}>
+        
+                    {selectImg ? (<Image
+                        source={{ uri: selectImg }}
+                        style={{ width: 300, height: 300, alignSelf: 'center', borderRadius: 150, }} />) : (<Image
+                            source={require('../../accets/user.png')}
+                            style={{ width: 300, height: 300, alignSelf: 'center', borderRadius: 150, }} />)}
+        
+                </View>
+   
+                <TouchableOpacity
+                    onPress={() => {
+                        imagePicker();
+                    }}
+                    style={{
+                        marginTop: 20, height: 50, width: 150, backgroundColor: 'green', borderRadius: 50, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', shadowColor: '#000',
+                        shadowOffset: {
+                            width: 0,
+                            height: 2,
+                        },
+                        shadowOpacity: 0.25,
+                        shadowRadius: 4,
+                        elevation: 5,
+                    }}
+                >
+                    <Text style={{ fontSize: 15 }}>Select Photo</Text>
+                </TouchableOpacity>
+        
+                <TouchableOpacity style={{ marginTop: 20, height: 50, width: 150, backgroundColor: 'green', borderRadius: 50, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', shadowColor: '#000',
+                        shadowOffset: {
+                            width: 0,
+                            height: 2,
+                        },
+                        shadowOpacity: 0.25,
+                        shadowRadius: 4,
+                        elevation: 5,}} onPress={()=>setStatys('tirdRegScr')}>
+                    <Text>Next</Text>
+                </TouchableOpacity>
+                    
+            </SafeAreaView>}
+
+
             {statys === 'tirdRegScr' && <View style={styles.cangeConteiner}>
                 <ScrollView style={{}}>
                     <Text style={{ fontSize: 25, marginBottom: 20, marginTop: 20 }}>What countries have you been to?</Text>
@@ -732,7 +795,7 @@ const HomeScreen = ({ navigation }) => {
                
             </View>}
 
-            {statys === 'appScr' && <View style={{ flex: 1 , }}>
+            {statys === 'appScr' && <View style={{ flex: 1, }}>
                 {/**Модалка з інфою юзера */}
                 <View style={styles.modalCenteredView}>
                     <Modal
@@ -743,7 +806,10 @@ const HomeScreen = ({ navigation }) => {
                         <View style={styles.modalCenteredView}>
 
                             <View style={styles.modalView}>
-                                <Image style={{ width: 80, height: 80, marginBottom: 10 }} source={require('../../accets/25345e8510eeaab262dcaf3c56c57f30.jpg')} />
+                                {selectImg ? (
+                                    <Image style={{ width: 80, height: 80, marginBottom: 10 , borderRadius: 50}} source={{uri: selectImg}} />)
+                                    : (<Image style={{ width: 80, height: 80, marginBottom: 10 }} source={require('../../accets/user.png')} />)}
+                                
                                 <Text style={{ marginBottom: 8, fontSize: 17 }}><Text style={styles.modalText}>Name:</Text> {allData.name} </Text>
                                 <Text style={{ marginBottom: 8, fontSize: 17 }}><Text style={styles.modalText}>Age:</Text> {allData.age} </Text>
                                 <Text style={{ marginBottom: 8, fontSize: 17 }}><Text style={styles.modalText}>Total Visited:</Text> {visitiesCountry.length} </Text>
@@ -804,29 +870,29 @@ const HomeScreen = ({ navigation }) => {
                                 </ScrollView>
 
                                 
-                                <View style={{justifyContent: 'center', marginLeft: 100}}>
+                                <View style={{ justifyContent: 'center', marginLeft: 100 }}>
 
-                                <TouchableOpacity
-                                    style={{
-                                        ...styles.modalButton, backgroundColor: '#dcdcdc',width: 40,
-                                        height: 40,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        borderRadius: 3,
-                                        shadowColor: '#000',
-                                        shadowOffset: {
-                                            width: 0,
-                                            height: 2,
-                                        },
-                                        shadowOpacity: 0.25,
-                                        shadowRadius: 4,
-                                        elevation: 5,
-                                    }}
-                                    onPress={() => { setAddModalVisitiesCountry(false) }}>
-                                    <Text
-                                        style={styles.modalTextStyle}>X
-                                    </Text>
-                                </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={{
+                                            ...styles.modalButton, backgroundColor: '#dcdcdc', width: 40,
+                                            height: 40,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            borderRadius: 3,
+                                            shadowColor: '#000',
+                                            shadowOffset: {
+                                                width: 0,
+                                                height: 2,
+                                            },
+                                            shadowOpacity: 0.25,
+                                            shadowRadius: 4,
+                                            elevation: 5,
+                                        }}
+                                        onPress={() => { setAddModalVisitiesCountry(false) }}>
+                                        <Text
+                                            style={styles.modalTextStyle}>X
+                                        </Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
@@ -947,11 +1013,11 @@ const HomeScreen = ({ navigation }) => {
                 
             </View>}
             
-            {statys === 'addPhoto' && <PhotoScreen />}
+           
                 
         </View>
     );
-};             
+};           
 
 const styles = StyleSheet.create({
     conteiner: {
@@ -971,7 +1037,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#228b22',
         marginHorizontal: 60,
-         shadowColor: '#000',
+        shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 2,
@@ -1004,7 +1070,7 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 5,
         borderRadius: 5,
-         shadowColor: '#000',
+        shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 2,
@@ -1049,7 +1115,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         backgroundColor: '#dcdcdc',
-         shadowColor: '#000',
+        shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 2,
@@ -1069,7 +1135,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 3,
-         shadowColor: '#000',
+        shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 2,
@@ -1087,14 +1153,14 @@ const styles = StyleSheet.create({
     ///////////////////////////
     addInfoModal: {
         backgroundColor: 'green',
-         borderRadius: 5,
-         width: 100,
-         justifyContent: 'center',
-         alignItems: 'center',
-         paddingTop: 5,
+        borderRadius: 5,
+        width: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 5,
         paddingBottom: 5,
         marginTop: 10,
-          shadowColor: '#000',
+        shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 2,
