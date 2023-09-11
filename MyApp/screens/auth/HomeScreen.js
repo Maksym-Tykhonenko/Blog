@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { 
     StyleSheet, 
@@ -10,19 +11,10 @@ import {
     FlatList,
     ScrollView,
     Modal,
-    Pressable,
-    Alert,
     SafeAreaView
 } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
-import PhotoScreen from '../main/PhotoScreen';
-import AddCountry from './AddCounry';
-
-
-
-//можливо сюди відправляти данні юзера
-// import AsyncStorage from '@react-native-async-storage/async-storage' 
 
 const countries = [
     {
@@ -596,15 +588,19 @@ const countries = [
 ];
 
 
-
 const HomeScreen = ({ navigation }) => {
     
     const [statys, setStatys] = useState('firstRegScr');
+    console.log('statys',statys)
     //стан ім'я юзера
     const [name, setName] = useState('');
+    //console.log('name =>', name)
     //стан віку юзера
     const [age, setAge] = useState('');
     //стан краін які відвідав юзер
+    //стейт фото аватаркі
+    const [selectImg, setSelectImg] = useState(null);
+    //стейт відв краін
     const [visitiesCountry, setVisitiesCountry] = useState([]);
     //стан інфи яку юзер сам заповнює про краіни в яких він був
     const [inform, setInform] = useState('')
@@ -620,8 +616,21 @@ const HomeScreen = ({ navigation }) => {
     const [addModalVisitiesCountry, setAddModalVisitiesCountry] = useState(false);
     //стан 
     const [selectedCountry, setSelectedCountry] = useState(null);
-    //стейт фото аватаркі
-    const [selectImg, setSelectImg] = useState(null);
+    
+
+
+    const handleSetNameAgeSt = async () => {
+        
+        setStatys('addPhoto')
+        try {
+            await AsyncStorage.setItem('name', JSON.stringify(name));
+            await AsyncStorage.setItem('age', JSON.stringify(age));
+            
+        } catch (e) {
+            // saving error
+        }
+
+    };
 
 
     const handleCountryPress = (country) => {
@@ -643,7 +652,9 @@ const HomeScreen = ({ navigation }) => {
 
     const selectAllData = () => {
         setAllData({ name: name.name, age: age.age, visitiesCountry: visitiesCountry });
-        setStatys('appScr')
+        setStatys('appScr');
+        storeAllData();
+        //console.log('statys' + statys)
     };
 
 
@@ -662,7 +673,39 @@ const HomeScreen = ({ navigation }) => {
             setAddInfoModalVisible(false);
         }
     };
+
+    const storeAllData = async () => {
+        try {
+            await AsyncStorage.setItem('allData', JSON.stringify(allData));
+            //await AsyncStorage.setItem('statys', JSON.stringify(statys));
+            await AsyncStorage.setItem('visitCountry', JSON.stringify(visitiesCountry))
+            console.log('saved')
+        } catch (e) {
+            // saving error  statysStoridj !== null && 
+        }
+    };
+    const getAllData = async () => {
+        try {
+            const data = await AsyncStorage.getItem('allData');
+            const visCountrs = await AsyncStorage.getItem('visitCountry')
+            if (data !==null && visCountrs !== null) {
+                setAllData(JSON.parse(data));
+                setVisitiesCountry(JSON.parse(visCountrs));
+                setStatys('tirdRegScr')
+                console.log('geting')
+            }
+        } catch (e){
+             // saving error
+        }
+    }
     
+    const storeImg = async (img) => {
+        try {
+            await AsyncStorage.setItem('img', JSON.stringify(img));
+        } catch (e) {
+            // saving error
+        }
+    };
 
     const imagePicker = () => {
     
@@ -675,9 +718,48 @@ const HomeScreen = ({ navigation }) => {
         launchImageLibrary(options, response => {
             console.log('response ==>', response.assets[0].uri);
             setSelectImg(response.assets[0].uri)
-        })
+        });
+
+        storeImg(selectImg)
+
     };
 
+    const getImg = async () => {
+        try {
+            const img = await AsyncStorage.getItem('img')
+            if (img !==null && statys !== null) {
+                setSelectImg(JSON.parse(img))
+            }
+        } catch (e){
+             // saving error
+        }
+    }
+    const getNameAgeSt = async () => {
+        try {
+            const name = await AsyncStorage.getItem('name');
+            const age = await AsyncStorage.getItem('age')
+            
+            if (statys !== null && name !== null && age !== null) {
+                setName(JSON.parse(name));
+                setAge(JSON.parse(age));
+            }
+        } catch (e) {
+            // saving error
+        }
+    };
+
+    useEffect(() => {
+    
+        getNameAgeSt()
+        getImg()
+        getAllData();
+        if (allData !== null) {
+            setStatys(appScr)
+        }
+    
+    }, []);
+
+    
 
     return (
 
@@ -714,7 +796,7 @@ const HomeScreen = ({ navigation }) => {
 
                 <TouchableOpacity
                     disabled={name !== '' && age !== '' ? false : true}
-                    onPress={() => setStatys('addPhoto')}
+                    onPress={() => handleSetNameAgeSt()}
                     style={styles.btn}>
                     <Text style={styles.btnTitle}>Next</Text>
                 </TouchableOpacity>
@@ -765,7 +847,8 @@ const HomeScreen = ({ navigation }) => {
 
             {statys === 'tirdRegScr' && <View style={styles.cangeConteiner}>
                 <ScrollView style={{}}>
-                    <Text style={{ fontSize: 25, marginBottom: 20, marginTop: 20 }}>What countries have you been to?</Text>
+                    {visitiesCountry ? (<Text style={{ fontSize: 25, marginBottom: 20, marginTop: 20 }}>Visited something new?</Text>): (<Text style={{ fontSize: 25, marginBottom: 20, marginTop: 20 }}>What countries have you been to?</Text>)}
+                    
                     
                     {countries.map((country) => {
                         return (
