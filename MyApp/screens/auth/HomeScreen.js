@@ -782,7 +782,7 @@ const HomeScreen = ({ navigation }) => {
                     
                     <TouchableOpacity
                         onPress={() => setStatys('secondRegScr')}
-                        style={styles.button}>
+                        style={{...styles.button, ...styles.shadow}}>
                         
                         <Text style={styles.btnTitle}>Next</Text>
                     </TouchableOpacity>
@@ -794,7 +794,7 @@ const HomeScreen = ({ navigation }) => {
                     <View style={{ marginTop: 50 }}>
                         
                         <TextInput
-                            style={styles.input}
+                            style={{...styles.input, ...styles.shadow}}
                             placeholder='Enter you are name'
                             onChangeText={(name) => setName((prev) => ({ ...prev, name }))}
                         />
@@ -802,7 +802,7 @@ const HomeScreen = ({ navigation }) => {
 
                     <View style={{ marginTop: 20, marginBottom: 50 }}>
                         <TextInput
-                            style={styles.input}
+                            style={{...styles.input, ...styles.shadow}}
                             placeholder='Enter you are age'
                             onChangeText={(age) => setAge((prev) => ({ ...prev, age }))}
                         />
@@ -811,7 +811,7 @@ const HomeScreen = ({ navigation }) => {
                     <TouchableOpacity
                         disabled={name !== '' && age !== '' ? false : true}
                         onPress={() => handleSetNameAgeSt()}
-                        style={{ ...styles.button, marginTop: 20 }}>
+                        style={{ ...styles.button, marginTop: 20, ...styles.shadow }}>
                         <Text style={styles.btnTitle}>Next</Text>
                     </TouchableOpacity>
                 </View>}
@@ -831,12 +831,15 @@ const HomeScreen = ({ navigation }) => {
                         onPress={() => {
                             imagePicker();
                         }}
-                        style={styles.button}
+                        style={{...styles.button, ...styles.shadow}}
                     >
                         <Text style={styles.btnTitle}>Select Photo</Text>
                     </TouchableOpacity>
         
-                    <TouchableOpacity style={{ ...styles.button, marginTop: 20 }} onPress={() => setStatys('tirdRegScr')}>
+                    <TouchableOpacity 
+                        style={{ ...styles.button, marginTop: 20, ...styles.shadow }} 
+                        onPress={() => setStatys('tirdRegScr')}
+                    >
                         <Text style={styles.btnTitle}>Next</Text>
                     </TouchableOpacity>
                     
@@ -860,7 +863,7 @@ const HomeScreen = ({ navigation }) => {
                                         <TouchableOpacity
                                             style={{
                                                 ...styles.countryItem,
-                                                backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? '#E89E0B' : '#1B1A17',
+                                                backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? '#E89E0B' : 'transparent',
                                             
                                             }}
                                             onPress={() => handleCountryPress(country)}
@@ -877,7 +880,7 @@ const HomeScreen = ({ navigation }) => {
                     
                             <TouchableOpacity
                                 onPress={() => selectAllData()}
-                                style={{ ...styles.button, marginBottom: 20, }}
+                                style={{ ...styles.button, marginBottom: 20, ...styles.shadow }}
                             >
                                 <Text style={styles.btnTitle}>Next</Text>
                             </TouchableOpacity></View>
@@ -901,10 +904,10 @@ const HomeScreen = ({ navigation }) => {
                                             <Image style={{ width: '100%', height: '100%', }} source={{ uri: selectImg }} /></View>)
                                         : (<View style={styles.avatarInModal}><Image style={{ width: '100%', height: '100%', }} source={require('../../accets/user.png')} /></View>)}
                                 
-                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={styles.modalText}>Name:</Text> {allData.name} </Text>
-                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={styles.modalText}>Age:</Text> {allData.age} </Text>
-                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={styles.modalText}>Total Visited:</Text> {visitiesCountry.length} </Text>
-                                    <Text style={{ ...styles.modalText, marginBottom: 8, color: '#E89E0B' }}>Countries in which I have been: </Text>
+                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Name:</Text> {allData.name} </Text>
+                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Age:</Text> {allData.age} </Text>
+                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Total Visited:</Text> {visitiesCountry.length} </Text>
+                                    <Text style={{ ...styles.modalText, marginBottom: 8, color: '#E89E0B', fontWeight: 'bold', fontSize: 17 }}>Countries in which I have been: </Text>
                                     <FlatList
                                         data={visitiesCountry}
                                         keyExtractor={visities => visities.id}
@@ -954,14 +957,6 @@ const HomeScreen = ({ navigation }) => {
                                                             padding: 10,
                                                             marginBottom: 10,
                                                             borderRadius: 10,
-                                                            shadowColor: '#D3B92A47',
-                                                            shadowOffset: {
-                                                                width: 0,
-                                                                height: 12,
-                                                            },
-                                                            shadowOpacity: 0.25,
-                                                            shadowRadius: 4,
-                                                            elevation: 5,
                                                             backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? '#E89E0B' : '#1B1A17'
                                            
                                                         }}
@@ -987,14 +982,6 @@ const HomeScreen = ({ navigation }) => {
                                                 height: 40,
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                shadowColor: '#000',
-                                                shadowOffset: {
-                                                    width: 0,
-                                                    height: 2,
-                                                },
-                                                shadowOpacity: 0.25,
-                                                shadowRadius: 4,
-                                                elevation: 5,
                                             }}
                                             onPress={() => { setAddModalVisitiesCountry(false) }}>
                                             <Text
@@ -1124,46 +1111,42 @@ const styles = StyleSheet.create({
     conteiner: {
         flex: 1,
         backgroundColor: '#1B1A17',
-        //alignItems: 'center',
-        //justifyContent: 'center',
         position: 'relative',
     },
     image: {
         flex: 1,
         resizeMode: 'cover',
-        //justifyContent: 'flex-end',
-        //justifyContent: 'center',
     },
     subcontainer: {
         paddingHorizontal: 20,
         paddingBottom: 20,
         paddingTop: 20,
+
         alignItems: 'center',
         justifyContent: 'center',
     },
     greetingText: {
         fontSize: 25,
         fontWeight: 'bold',
+
         marginBottom: 150,
         marginTop: 50,
+
         color: '#E89E0B'
     },
     button: {
         width: 241,
         height: 57,
+
         top: 6,
+
         borderWidth: 1,
         borderRadius: 50,
+
         backgroundColor: '#E89E0B',
+        
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: '#D3B92A47',
-        shadowOffset: {
-            width: 0,
-            height: 12,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
     },
     btnTitle: {
         fontSize: 20,
@@ -1173,23 +1156,31 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: 2,
         borderColor: '#E89E0B',
+        borderRadius: 10,
+
         height: 50,
         width: 250,
-        borderRadius: 10,
+        
         backgroundColor: 'transparent',
+
         paddingHorizontal: 20,
+
         color: '#E89E0B',
+
         fontSize: 18,
         fontWeight: '700'
     },
     avatarConteiner: {
         marginTop: 40,
         marginBottom: 20,
+
         width: 300,
         height: 300,
+
         borderRadius: 150, // Половина ширини/висоти для зроблення круглим
         borderWidth: 2,
         borderColor: '#E89E0B',
+
         overflow: 'hidden',
     },
     avatar: {
@@ -1199,153 +1190,145 @@ const styles = StyleSheet.create({
     textBeforeCountryList: {
         fontSize: 25,
         fontWeight: 'bold',
+
         marginTop: 15,
         marginBottom: 15,
+
         color: '#E89E0B'
     },
     countryItem: {
         width: 290,
+
         borderColor: '#E89E0B',
         borderWidth: 2,
+        borderRadius: 10,
+
         alignItems: 'center',
         justifyContent: 'center',
+
         padding: 10,
         marginBottom: 10,
-        borderRadius: 10,
-        shadowColor: '#D3B92A47',
-        shadowOffset: {
-            width: 0,
-            height: 12,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
+        
     },
     /////////////////////////////////////////////////////////////
     modalButtonIcon: {
         fontWeight: 'bold',
-        color: '#E89E0B',
         fontSize: 20,
+
+        color: '#E89E0B',
+        
     },
     modalButton: {
         borderRadius: 15,
-        width: 40,
-        height: 40,
-        alignItems: 'center',
-        justifyContent: 'center',
         borderWidth: 1,
         borderColor: '#E89E0B',
+
+        width: 40,
+        height: 40,
+
+        alignItems: 'center',
+        justifyContent: 'center',
+        
         backgroundColor: '#1B1A17'
     },
     modalButtonOpen: {
         
-        //backgroundColor: '#dcdcdc',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-
     },
     modalButtonClose: {
-        //backgroundColor: '#dcdcdc',
         position: "absolute",
         left: '50%',
         bottom: 50,
-        
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-      
     },
     /////////////////
     selectCountryCard: {
         justifyContent: 'center',
-        paddingLeft: 5,
-        paddingBottom: 5,
+
         marginBottom: 5,
-        borderRadius: 15,
-        backgroundColor: 'transparent',
-        borderWidth: 1,
-        borderColor: '#E89E0B',
         marginBottom: 10,
         marginHorizontal: 20,
+        
+        paddingBottom: 5,
         paddingTop: 10,
-        paddingLeft: 15
+        paddingLeft: 15,
+
+        backgroundColor: 'transparent',
+
+        borderRadius: 15,
+        borderWidth: 1,
+        borderColor: '#E89E0B',
     },
     addInfoModal: {
         backgroundColor: '#E89E0B',
+
         borderRadius: 50,
+
         width: 100,
+
         justifyContent: 'center',
         alignItems: 'center',
+
         paddingTop: 5,
         paddingBottom: 5,
+
         marginTop: 10,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 18,
     },
     additionalCountryInformation: {
         marginTop: 10,
         marginRight: 15,
+
         paddingVertical: 10,
         paddingHorizontal: 15,
+
         borderRadius: 5,
         borderWidth: 1,
         borderColor: '#E89E0B',
+
         backgroundColor: 'transparent',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
     },
     /////////////////
     modalCenteredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+
         marginTop: 22,
+
         backgroundColor: '#1B1A17',
     },
     modalView: {
         margin: 20,
+
+        padding: 35,
+
         backgroundColor: 'transparent',
+
         borderWidth: 2,
         borderColor: '#E89E0B',
         borderRadius: 20,
-        padding: 35,
+        
         alignItems: 'flex-start',
     },
     avatarInModal: {
         marginBottom: 20,
-                                            width: 80,
-                                            height: 80,
-                                            borderRadius: 150, // Половина ширини/висоти для зроблення круглим
-                                            borderWidth: 2,
-                                            borderColor: '#E89E0B',
-                                            overflow: 'hidden',
-    }
-    ///////////////////////////
-    
 
- 
+        width: 80,
+        height: 80,
+
+        borderRadius: 150, // Половина ширини/висоти для зроблення круглим
+        borderWidth: 2,
+        borderColor: '#E89E0B',
+
+        overflow: 'hidden',
+    },
+    shadow: {
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 15,
+    }
 });
     
 
