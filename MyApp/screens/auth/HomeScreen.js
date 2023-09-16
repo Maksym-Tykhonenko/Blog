@@ -1,5 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import React, { useState, useEffect } from 'react';
+
 import { 
     StyleSheet, 
     View, 
@@ -13,580 +14,12 @@ import {
     Modal,
     SafeAreaView
 } from 'react-native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
 
-
-const countries = [
-    {
-        id: 48,
-        country: "Canada",
-        capital: "Ottawa",
-        BestNationalDish: "Poutine",
-        BestSightseeing: "Banff National Park",
-        info: '',
-    },
-    {
-        id: 49,
-        country: "United States of America",
-        capital: "Washington, D.C.",
-        BestNationalDish: "Hamburger",
-        BestSightseeing: "Grand Canyon",
-        info: '',
-    },
-    {
-        id: 50,
-        country: "Mexico",
-        capital: "Mexico City",
-        BestNationalDish: "Tacos",
-        BestSightseeing: "Chichen Itza",
-        info: '',
-    },
-    {
-        id: 51,
-        country: "The Bahamas",
-        capital: "Nassau",
-        BestNationalDish: "Conch Salad",
-        BestSightseeing: "Exuma Cays",
-        info: '',
-    },
-    {
-        id: 52,
-        country: "Barbados",
-        capital: "Bridgetown",
-        BestNationalDish: "Cou-Cou and Flying Fish",
-        BestSightseeing: "Harrison's Cave",
-        info: '',
-    },
-    {
-        id: 53,
-        country: "Belize",
-        capital: "Belmopan",
-        BestNationalDish: "Rice and Beans with Stew Chicken",
-        BestSightseeing: "Great Blue Hole",
-        info: '',
-    },
-    {
-        id: 54,
-        country: "Haiti",
-        capital: "Port-au-Prince",
-        BestNationalDish: " Griot and Pikliz",
-        BestSightseeing: "Citadelle Laferrière",
-        info: '',
-    },
-    {
-        id: 55,
-        country: "Guyana",
-        country: "Guyana",
-        capital: "Georgetown",
-        BestNationalDish: "Pepperpot",
-        BestSightseeing: "Kaieteur Falls",
-        info: '',
-    },
-    {
-        id: 56,
-        country: "Honduras",
-        capital: "Tegucigalpa",
-        BestNationalDish: "Baleadas",
-        BestSightseeing: "Copán Ruins",
-        info: '',
-    },
-    {
-        id: 57,
-        country: "Grenada",
-        capital: "St. George's",
-        BestNationalDish: "Oil Down",
-        BestSightseeing: "Grand Anse Beach",
-        info: '',
-    },
-    {
-        id: 58,
-        country: "Dominica",
-        capital: "Roseau",
-        BestNationalDish: "Callaloo Soup",
-        BestSightseeing: "Boiling Lake",
-
-        info: '',
-    },
-    {
-        id: 59,
-        country: "Dominican Republic",
-        capital: "Santo Domingo",
-        BestNationalDish: "Mangú",
-        BestSightseeing: "Punta Cana",
-
-        info: '',
-    },
-    {
-        id: 60,
-        country: "Costa Rica",
-        capital: "San José",
-        BestNationalDish: "Gallo Pinto",
-        BestSightseeing: "Arenal Volcano",
-        info: '',
-    },
-    {
-        id: 61,
-        country: "Cuba",
-        capital: "Havana",
-        BestNationalDish: "Ropa Vieja",
-        BestSightseeing: "Old Havana",
-
-        info: '',
-    },
-    {
-        id: 62,
-        country: "Nicaragua",
-        capital: "Managua",
-        BestNationalDish: "Gallo Pinto",
-        BestSightseeing: "Ometepe Island",
-        info: '',
-    },
-    {
-        id: 63,
-        country: "Panama",
-        capital: "Panama City",
-        BestNationalDish: "Sancocho",
-        BestSightseeing: "Panama Canal",
-        info: '',
-    },
-    {
-        id: 64,
-        country: "Saint Kitts and Nevis",
-        capital: "Basseterre",
-        BestNationalDish: "Saltfish and Johnny Cakes",
-        BestSightseeing: "Brimstone Hill Fortress",
-
-        info: '',
-    },
-    {
-        id: 65,
-        country: "Saint Lucia",
-        capital: "Castries",
-        BestNationalDish: "Green Fig and Saltfish",
-        BestSightseeing: "Pitons",
-        info: '',
-    },
-    {
-        id: 66,
-        country: "Saint Vincent and the Grenadines",
-        capital: "Kingstown",
-        BestNationalDish: "Roasted Breadfruit and Fried Jackfish",
-        BestSightseeing: "Tobago Cays",
-        info: '',
-    },
-    {
-        id: 67,
-        country: "Trinidad and Tobago",
-        capital: "Port of Spain",
-        BestNationalDish: "Roti",
-        BestSightseeing: "Maracas Beach",
-
-        info: '',
-    },
-    {
-        id: 68,
-        country: "Jamaica",
-        capital: "Kingston",
-        BestNationalDish: "Jerk Chicken",
-        BestSightseeing: "Dunn's River Falls",
-
-        info: '',
-    },
-    {
-        id: 69,
-        country: "El Salvador",
-        capital: "San Salvador",
-        BestNationalDish: "Pupusas",
-        BestSightseeing: "Ruta de las Flores",
-
-        info: '',
-    },
-    {
-        id: 70,
-        country: "Guatemala",
-        capital: "Guatemala City",
-        BestNationalDish: "Pepián",
-        BestSightseeing: "Tikal National Park",
-        info: '',
-    },
-    {
-        id: 1,
-        country: "Albania",
-        capital: "Tirana",
-        BestNationalDish: "Tavë kosi",
-        BestSightseeing: "Butrint",
-        info: '',
-    },
-    {
-        id: 2,
-        country: "Andorra",
-        capital: "Andorra la Vella",
-        BestNationalDish: "Trinxat",
-        BestSightseeing: "Casa de la Vall",
-        info: '',
-    },
-    {
-        id: 3,
-        country: "Austria",
-        capital: "Vienna",
-        BestNationalDish: "Wiener Schnitzel",
-        BestSightseeing: "Schönbrunn Palace",
-        info: '',
-    },
-    {
-        id: 4,
-        country: "Belarus",
-        capital: "Minsk",
-        BestNationalDish: "Draniki",
-        BestSightseeing: "Mir Castle Complex",
-        info: '',
-    },
-    {
-        id: 5,
-        country: "Belgium",
-        capital: "Brussels",
-        BestNationalDish: "Moules-frites",
-        BestSightseeing: "Grand Place",
-        info: '',
-    },
-    {
-        id: 6,
-        country: "Bosnia and Herzegovina",
-        capital: "Sarajevo",
-        BestNationalDish: "Ćevapi",
-        BestSightseeing: "Stari Most",
-        info: '',
-    },
-    {
-        id: 7,
-        country: "Bulgaria",
-        capital: "Sofia",
-        BestNationalDish: "Bulgarian Banitsa",
-        BestSightseeing: "Rila Monastery",
-        info: '',
-    },
-    {
-        id: 8,
-        country: "Croatia",
-        capital: "Zagreb",
-        BestNationalDish: "Pasticada",
-        BestSightseeing: "Plitvice Lakes",
-        info: '',
-    },
-    {
-        id: 9,
-        country: "Cyprus",
-        capital: "Nicosia",
-        BestNationalDish: "Cyprus Meze",
-        BestSightseeing: "Kourion",
-        info: '',
-    },
-    {
-        id: 10,
-        country: "Czech Republic",
-        capital: "Prague",
-        BestNationalDish: "Svíčková",
-        BestSightseeing: "Charles Bridge",
-        info: '',
-    },
-    {
-        id: 11,
-        country: "Denmark",
-        capital: "Copenhagen",
-        BestNationalDish: "Smørrebrød",
-        BestSightseeing: "Tivoli Gardens",
-        info: '',
-    },
-    {
-        id: 12,
-        country: "Estonia",
-        capital: "Tallinn",
-        BestNationalDish: "Verivorst",
-        BestSightseeing: "Old Town Tallinn",
-        info: '',
-    },
-    {
-        id: 13,
-        country: "Finland",
-        capital: "Helsinki",
-        BestNationalDish: "Kalakukko",
-        BestSightseeing: "Suomenlinna",
-        info: '',
-    },
-    {
-        id: 14,
-        country: "France",
-        capital: "Paris",
-        BestNationalDish: "Coq au Vin",
-        BestSightseeing: "Eiffel Tower",
-        info: '',
-    },
-    {
-        id: 15,
-        country: "Germany",
-        capital: "Berlin",
-        BestNationalDish: "Sauerbraten",
-        BestSightseeing: "Neuschwanstein Castle",
-        info: '',
-    },
-    {
-        id: 16,
-        country: "Greece",
-        capital: "Athens",
-        BestNationalDish: "Moussaka",
-        BestSightseeing: "Acropolis of Athens",
-        info: '',
-    },
-    {
-        id: 17,
-        country: "Hungary",
-        capital: "Budapest",
-        BestNationalDish: "Goulash",
-        BestSightseeing: "Fisherman's Bastion",
-        info: '',
-    },
-    {
-        id: 18,
-        country: "Iceland",
-        capital: "Reykjavik",
-        BestNationalDish: "Lambakjöt",
-        BestSightseeing: "Blue Lagoon",
-        info: '',
-    },
-    {
-        id: 19,
-        country: "Ireland",
-        capital: "Dublin",
-        BestNationalDish: "Irish Stew",
-        BestSightseeing: "Cliffs of Moher",
-        info: '',
-    },
-    {
-        id: 20,
-        country: "Italy",
-        capital: "Rome",
-        BestNationalDish: "Pizza",
-        BestSightseeing: "Colosseum",
-        info: '',
-    },
-    {
-        id: 21,
-        country: "Kazakhstan",
-        capital: "Nur-Sultan",
-        BestNationalDish: "Beshbarmak",
-        BestSightseeing: "Charyn Canyon",
-        info: '',
-    },
-    {
-        id: 22,
-        country: "Kosovo",
-        capital: "Pristina",
-        BestNationalDish: "Flia",
-        BestSightseeing: "Gračanica Monastery",
-        info: '',
-    },
-    {
-        id: 23,
-        country: "Latvia",
-        capital: "Riga",
-        BestNationalDish: "Rupjmaize",
-        BestSightseeing: "Rundāle Palace",
-        info: '',
-    },
-    {
-        id: 24,
-        country: "Liechtenstein",
-        capital: "Vaduz",
-        BestNationalDish: "Käsknöpfle",
-        BestSightseeing: "Vaduz Castle",
-        info: '',
-    },
-    {
-        id: 25,
-        country: "Lithuania",
-        capital: "Vilnius",
-        BestNationalDish: "Cepelinai",
-        BestSightseeing: "Trakai Island Castle",
-        info: '',
-    },
-    {
-        id: 26,
-        country: "Luxembourg",
-        capital: "Luxembourg City",
-        BestNationalDish: "Judd mat Gaardebounen",
-        BestSightseeing: "Vianden Castle",
-        info: '',
-    },
-    {
-        id: 27,
-        country: "Malta",
-        capital: "Valletta",
-        BestNationalDish: "Fenek",
-        BestSightseeing: "Megalithic Temples of Malta",
-        info: '',
-    },
-    {
-        id: 28,
-        country: "Moldova",
-        capital: "Chisinau",
-        BestNationalDish: "Mămăligă",
-        BestSightseeing: "Cricova Winery",
-        info: '',
-    },
-    {
-        id: 29,
-        country: "Monaco",
-        capital: "Monaco",
-        BestNationalDish: "Barbagiuan",
-        BestSightseeing: "Monte Carlo Casino",
-        info: '',
-    },
-    {
-        id: 30,
-        country: "Montenegro",
-        capital: "Podgorica",
-        BestNationalDish: "Njeguški pršut",
-        BestSightseeing: "Bay of Kotor",
-        info: '',
-    },
-    {
-        id: 31,
-        country: "Netherlands",
-        capital: "Amsterdam",
-        BestNationalDish: "Stroopwafels",
-        BestSightseeing: "Keukenhof Gardens",
-        info: '',
-    },
-    {
-        id: 32,
-        country: "North Macedonia",
-        capital: "Skopje",
-        BestNationalDish: "Tavče gravče",
-        BestSightseeing: "Lake Ohrid",
-        info: '',
-    },
-    {
-        id: 33,
-        country: "Norway",
-        capital: "Oslo",
-        BestNationalDish: "Rakfisk",
-        BestSightseeing: "Fjords of Norway",
-        info: '',
-    },
-    {
-        id: 34,
-        country: "Poland",
-        capital: "Warsaw",
-        BestNationalDish: "Pierogi",
-        BestSightseeing: "Wieliczka Salt Mine",
-        info: '',
-    },
-    {
-        id: 35,
-        country: "Portugal",
-        capital: "Lisbon",
-        BestNationalDish: "Bacalhau à brás",
-        BestSightseeing: "Belém Tower",
-        info: '',
-    },
-    {
-        id: 36,
-        country: "Romania",
-        capital: "Bucharest",
-        BestNationalDish: "Mămăligă",
-        BestSightseeing: "Bran Castle",
-        info: '',
-    },
-    {
-        id: 37,
-        country: "Russia",
-        capital: "Moscow",
-        BestNationalDish: "Pelmeni",
-        BestSightseeing: "Red Square",
-        info: '',
-    },
-    {
-        id: 38,
-        country: "San Marino",
-        capital: "San Marino",
-        BestNationalDish: "Torta Tre Monti",
-        BestSightseeing: "San Marino Historic Centre and Mount Titano",
-        info: '',
-    },
-    {
-        id: 39,
-        country: "Serbia",
-        capital: "Belgrade",
-        BestNationalDish: "Ćevapi",
-        BestSightseeing: "Belgrade Fortress",
-        info: '',
-    },
-    {
-        id: 40,
-        country: "Slovakia",
-        capital: "Bratislava",
-        BestNationalDish: "Bryndzové halušky",
-        BestSightseeing: "Bratislava Castle",
-        info: '',
-    },
-    {
-        id: 41,
-        country: "Slovenia",
-        capital: "Ljubljana",
-        BestNationalDish: "Idrijski žlikrofi",
-        BestSightseeing: "Lake Bled",
-        info: '',
-    },
-    {
-        id: 42,
-        country: "Spain",
-        capital: "Madrid",
-        BestNationalDish: "Paella",
-        BestSightseeing: "Sagrada Família",
-        info: '',
-    },
-    {
-        id: 43,
-        country: "Sweden",
-        capital: "Stockholm",
-        BestNationalDish: "Swedish Meatballs",
-        BestSightseeing: "Stockholm Palace",
-        info: '',
-    },
-    {
-        id: 44,
-        country: "Switzerland",
-        capital: "Bern",
-        BestNationalDish: "Rösti",
-        BestSightseeing: "Jungfraujoch",
-        info: '',
-    },
-    {
-        id: 45,
-        country: "Ukraine",
-        capital: "Kyiv",
-        BestNationalDish: "Borscht",
-        BestSightseeing: "St. Sophia's Cathedral",
-        info: '',
-    },
-    {
-        id: 46,
-        country: "United Kingdom",
-        capital: "London",
-        BestNationalDish: "Fish and Chips",
-        BestSightseeing: "Big Ben",
-        info: '',
-    },
-    {
-        id: 47,
-        country: "Vatican City",
-        capital: "Vatican City",
-        BestNationalDish: "Supplì",
-        BestSightseeing: "St. Peter's Basilica",
-        info: '',
-    }
-];
+import { countries } from '../../data/countries';
 
 
 const HomeScreen = ({ navigation }) => {
@@ -603,12 +36,13 @@ const HomeScreen = ({ navigation }) => {
     const [selectImg, setSelectImg] = useState(null);
     //стейт відв краін
     const [visitiesCountry, setVisitiesCountry] = useState([]);
+    console.log("visitiesCountry ==>",visitiesCountry )
     //стан інфи яку юзер сам заповнює про краіни в яких він був
     const [inform, setInform] = useState('')
     //console.log('inform',inform)
     //стан всіх данних юзера
     const [allData, setAllData] = useState(null);
-    //console.log('allData =>', allData)
+    console.log('allData =>', allData)
     // стан мадалки данних юзера
     const [modalVisible, setModalVisible] = useState(false);
     // стан мадалки для додавання нових категорій
@@ -617,92 +51,99 @@ const HomeScreen = ({ navigation }) => {
     const [addModalVisitiesCountry, setAddModalVisitiesCountry] = useState(false);
     //стан 
     const [selectedCountry, setSelectedCountry] = useState(null);
+
+    {/** служебная кліар функция
+    clearAll = async () => {
+        try {
+            await AsyncStorage.clear()
+        } catch (e) {
+            // clear error
+        }
     
+        console.log('Done.')
+    };*/}
 
+    //ефект доставання данних із стора
+    useEffect(() => {
 
-    const handleSetNameAgeSt = () => {
+        getFromStoreAllData();
+        getFromStoreVisitiesCountry();
+        getFromStoreSelectImg();
+
+    }, []);
+
+    //ефект запису данних в стор
+    useEffect(() => {
+
+        setInStoreAllData();
+        setInStoreVisitiesCountry();
+        setInStoreSelectImgelectImg();
         
-        setStatys('addPhoto')
-        //try { async 
-        //    await AsyncStorage.setItem('name', JSON.stringify(name));
-        //    await AsyncStorage.setItem('age', JSON.stringify(age));
-        //    await AsyncStorage.setItem('statys', JSON.stringify(statys))
-        //} catch (e) {
-        //    // saving error
-        //}
+    }, [allData, visitiesCountry]);
 
-    };
+    //foo запису дати в стор
+    const setInStoreAllData = async () => {
 
-
-    const handleCountryPress = (country) => {
-        // Перевіряємо, чи країна вже є в списку відвіданих
-        const isVisited = visitiesCountry.some((item) => item.id === country.id);
-
-        
-        if (isVisited) {
-            // Якщо країна вже була відвідана, видаляємо її зі списку
-            const updatedCountries = visitiesCountry.filter((item) => item.id !== country.id);
-            setVisitiesCountry(updatedCountries);
-
-            
-        } else {
-            // Якщо країна ще не була відвідана, додаємо її до списку
-            setVisitiesCountry([...visitiesCountry, country]);
-        }
-    };
-
-    const selectAllData = () => {
-        setAllData({ name: name.name, age: age.age, visitiesCountry: visitiesCountry });
-        setStatys('appScr');
-        //storeAllData();
-        //console.log('statys' + statys)
-    };
-
-
-    const handleAddInfo = () => {
-
-        if (selectedCountry) {
-            // Шукаємо країну в стані visitiesCountry
-            const updatedData = visitiesCountry.map((item) => {
-                if (item.id === selectedCountry.id) {
-                    return { ...item, info: inform };
-                }
-                return item;
-            });
-
-            setVisitiesCountry(updatedData);
-            setAddInfoModalVisible(false);
-        }
-    };
-
-    {/**  const storeAllData = async () => {
         try {
             await AsyncStorage.setItem('allData', JSON.stringify(allData));
-            await AsyncStorage.setItem('statys', JSON.stringify(statys));
-            await AsyncStorage.setItem('visitCountry', JSON.stringify(visitiesCountry))
-            console.log('saved')
+            console.log('записали ДАТУ в стор')
         } catch (e) {
-            // saving error  statysStoridj !== null && 
+            console.log(e)
         }
     };
-    const getAllData = async () => {
+
+    //foo запису visitiesCountry в стор
+    const setInStoreVisitiesCountry = async () => {
+
+        try {
+            await AsyncStorage.setItem('visitiesCountry', JSON.stringify(visitiesCountry));
+            console.log('записали visitiesCountry в стор')
+        } catch (e) {
+            console.log(e)
+        }
+    };
+
+     //foo запису selectImg в стор
+    const setInStoreSelectImgelectImg = async () => {
+
+        try {
+            await AsyncStorage.setItem('selectImg', JSON.stringify(selectImg));
+            console.log('записали selectImg в стор')
+        } catch (e) {
+            console.log(e)
+        }
+    };
+    
+    //foo доставання дати із стора
+    const getFromStoreAllData = async () => {
         try {
             const data = await AsyncStorage.getItem('allData');
-            const visCountrs = await AsyncStorage.getItem('visitCountry')
-            if (data !== null && visCountrs !== null) {
+            if (data !== null) {
                 setAllData(JSON.parse(data));
-                setVisitiesCountry(JSON.parse(visCountrs));
-                //setStatys('addPhoto')
-                console.log('geting')
+                // Здійснюйте дії з отриманими даними, наприклад, встановлюйте їх у стан компоненту.
+                console.log('Отримані дані зі сховища:', allData);
             }
         } catch (e) {
-            // saving error
+            console.log(e);
         }
-    }
- */}
-    
+    };
+
+    //foo доставання visitiesCountry із стора
+    const getFromStoreVisitiesCountry = async () => {
+        try {
+            const visitC = await AsyncStorage.getItem('visitiesCountry');
+            if (visitC !== null) {
+                setVisitiesCountry(JSON.parse(visitC));
+                // Здійснюйте дії з отриманими даними, наприклад, встановлюйте їх у стан компоненту.
+                console.log('Отримані дані visitiesCountry зі сховища:', visitiesCountry);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
 
+    //foo додав аватарки 
     const imagePicker = () => {
     
         let options = {
@@ -715,56 +156,96 @@ const HomeScreen = ({ navigation }) => {
             //console.log('response ==>', response.assets[0].uri);
             setSelectImg(response.assets[0].uri)
         });
-        console.log(selectImg)
+        //console.log(selectImg)
         // storeImg(selectImg)
 
     };
 
-    {/**    const storeImg = async (img) => {
+    //foo доставання дати із стора
+    const getFromStoreSelectImg = async () => {
         try {
-            await AsyncStorage.setItem('img', JSON.stringify(img));
+            const ava = await AsyncStorage.getItem('selectImg');
+            if (ava !== null) {
+                setSelectImg(JSON.parse(ava));
+                // Здійснюйте дії з отриманими даними, наприклад, встановлюйте їх у стан компоненту.
+                console.log('Отримані дані зі сховища:', selectImg);
+            }
         } catch (e) {
-            // saving error
+            console.log(e);
         }
     };
 
-    const getImg = async () => {
-        try {
-            const img = await AsyncStorage.getItem('img')
-            if (img !==null ) {
-                setSelectImg(JSON.parse(img))
-            }
-        } catch (e){
-             // saving error
-        }
-    }
-    const getNameAgeSt = async () => {
-        try {
-            const name = await AsyncStorage.getItem('name');
-            const age = await AsyncStorage.getItem('age')
-            //const stat = await AsyncStorage.getItem('statys')
-            if (statys !== null && name !== null && age !== null) {
-                setName(JSON.parse(name));
-                setAge(JSON.parse(age));
-                //setStatys(JSON.parse(stat))
-            }
-        } catch (e) {
-            // saving error
+    //foo додавання то віднімання відвіданих краін 
+    const handleCountryPress = (country) => {
+        // Перевіряємо, чи країна вже є в списку відвіданих
+        const isVisited = visitiesCountry.some((item) => item.id === country.id);
+        
+        if (isVisited) {
+            // Якщо країна вже була відвідана, видаляємо її зі списку
+            const updatedCountries = visitiesCountry.filter((item) => item.id !== country.id);
+            setVisitiesCountry(updatedCountries);
+            
+        } else {
+            // Якщо країна ще не була відвідана, додаємо її до списку
+            setVisitiesCountry([...visitiesCountry, country]);
         }
     };
 
-    useEffect(() => {
-    
-        //getNameAgeSt()
-        getImg()
-        getAllData();
-        if (allData !== null) {
-            setStatys('appScr')
-        }
-    
-    }, []);*/}
+    //foo сбору всіх данних юзера 
+    const selectAllData = () => {
+        //alert("дані успішно отримані");
+        setAllData({
+            name: name.name,
+            age: age.age,
+            visitiesCountry: visitiesCountry,
+            avatar: selectImg,
+        });
+        setStatys('');
+        //console.log('85 ALL DATA ==>', allData)
+    };
 
-    
+    //foo додавання інфи до картки краіни
+    const handleAddInfo = () => {
+
+        if (selectedCountry) {
+            // Шукаємо країну в стані visitiesCountry
+            const updatedCountryData = visitiesCountry.map((item) => {
+                if (item.id === selectedCountry.id) {
+                    return { ...item, info: inform };
+                }
+                return item;
+            });
+
+            setAllData((prevData) => ({
+                ...prevData, visitiesCountry: updatedCountryData
+            }));
+            setVisitiesCountry(updatedCountryData);
+            setAddInfoModalVisible(false);
+        };
+    };
+
+    //foo  додавання то віднімання відвіданих краін в МОДАЛЦІ
+    const handleCountryPressInModalView = (country) => {
+
+        // Перевіряємо, чи країна вже є в списку відвіданих
+        const isVisited = visitiesCountry.some((item) => item.id === country.id);
+        
+        if (isVisited) {
+            // Якщо країна вже була відвідана, видаляємо її зі списку
+            const updatedCountries = visitiesCountry.filter((item) => item.id !== country.id);
+            setVisitiesCountry(updatedCountries);
+            setAllData((prevData) => ({
+                ...prevData, visitiesCountry: updatedCountries
+            }));
+        } else {
+            // Якщо країна ще не була відвідана, додаємо її до списку
+            setVisitiesCountry([...visitiesCountry, country]);
+            setAllData((prevData) => ({
+                ...prevData, visitiesCountry: country
+            }))
+        }
+    };
+
 
     return (
 
@@ -776,7 +257,242 @@ const HomeScreen = ({ navigation }) => {
                 style={styles.image}
             >
             
-                {statys === 'firstRegScr' && <View style={styles.subcontainer}>
+                {allData ? (<View style={{ flex: 1,  }}>
+                    
+                    {/* <модалка інфи юзера */}
+                    <View style={{...styles.modalCenteredView, }}>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}>
+                        
+                            <View style={styles.modalCenteredView}>
+
+                                <View style={{...styles.modalView}}>
+                                    {selectImg ? (
+                                        <View style={styles.avatarInModal} >
+                                            <TouchableOpacity
+                                            onPress={() => {
+                                                imagePicker();
+                                            }}>
+                                                <Image style={{ width: '100%', height: '100%', }} source={{ uri: selectImg }} />
+                                            </TouchableOpacity>
+                                            </View>)
+                                        : (<View style={styles.avatarInModal}>
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                imagePicker();
+                                            }}>
+                                            <Image style={{ width: '100%', height: '100%', }} source={require('../../accets/user.png')} />
+                                        </TouchableOpacity>
+                                        </View>)}
+                                
+                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Name:</Text> {allData.name} </Text>
+                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Age:</Text> {allData.age} </Text>
+                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Total Visited:</Text> {visitiesCountry.length} </Text>
+                                    <Text style={{ ...styles.modalText, marginBottom: 8, color: '#E89E0B', fontWeight: 'bold', fontSize: 17 }}>Countries in which I have been: </Text>
+                                    <FlatList
+                                        data={visitiesCountry}
+                                        keyExtractor={visities => visities.id}
+                                        renderItem={({ item }) =>
+                                            <TouchableOpacity>
+                                                <Text style={{ marginBottom: 6, fontSize: 15, color: '#E89E0B' }} >-{item.country}</Text>
+                                            </TouchableOpacity>} />
+
+                                    <TouchableOpacity
+                                        style={{ ...styles.modalButton, ...styles.modalButtonClose }}
+                                        onPress={() => setModalVisible(!modalVisible)}>
+                                        <Text
+                                            style={styles.modalButtonIcon}>X
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </Modal>
+                    
+                    </View>
+
+                    {/**модалка додав краін */}
+                    <View style={styles.modalCenteredView}>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={addModalVisitiesCountry}>
+                        
+                            <View style={styles.modalCenteredView}>
+
+                                <View style={styles.modalView}>
+                               
+                                    <Text style={{ fontSize: 25, marginBottom: 10, color: '#E89E0B' }}>What countries have you been to?</Text>
+
+                                    <ScrollView>
+                                        
+
+                                        {countries.map((country) => {
+                                            return (
+                                                <View key={country.id}>
+                                                    <TouchableOpacity
+                                                        style={{
+                                                            borderColor: '#E89E0B',
+                                                            borderWidth: 2,
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            padding: 10,
+                                                            marginBottom: 10,
+                                                            borderRadius: 10,
+                                                            backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? '#E89E0B' : '#1B1A17'
+                                           
+                                                        }}
+                                                        onPress={() => handleCountryPressInModalView(country)}
+                                                    >
+                                                        <Text style={{color: visitiesCountry.some((i) => i.id === country.id) ? '#1B1A17' : '#E89E0B'}}>{country.country}</Text>
+                                                    </TouchableOpacity>
+                                
+                                                </View>
+                                            );
+                                        })}
+
+                                    </ScrollView>
+
+                                
+                                    <View style={{ justifyContent: 'center', marginLeft: 100 }}>
+
+                                        <TouchableOpacity
+                                            style={{
+                                                ...styles.modalButton,
+                                                marginTop: 10,
+                                                width: 40,
+                                                height: 40,
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}
+                                            onPress={() => { setAddModalVisitiesCountry(false) }}>
+                                            <Text
+                                                style={styles.modalButtonIcon}>X
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                        </Modal>
+                    
+                    </View>
+
+                    {/** кнопки відкриття модалок */}
+                    <View style={{ marginBottom: 15, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+
+                        <TouchableOpacity
+                            style={{ ...styles.modalButton, ...styles.modalButtonOpen }}
+                            onPress={() => { setModalVisible(true) }}>
+                            <Text style={styles.modalButtonIcon}>|{''}|{''}|</Text>
+
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={{ ...styles.modalButton, ...styles.modalButtonOpen }}
+                            onPress={() => { setAddModalVisitiesCountry(true) }}>
+                            <Text style={styles.modalButtonIcon}>{''}+{''}</Text>
+
+                        </TouchableOpacity>
+
+                       {/* служебная кнопка очистки інфи в сторе
+                        <TouchableOpacity
+                            style={{ ...styles.modalButton, ...styles.modalButtonOpen }}
+                            onPress={() =>  clearAll() }>
+                            <Text style={styles.modalButtonIcon}>{''}x{''}</Text>
+
+                            </TouchableOpacity>*/}
+                    </View>
+               
+
+                    <ScrollView>
+                        {visitiesCountry.map((country) => {
+                            return (
+                                <View
+                                    style={styles.selectCountryCard}
+                                    key={country.id}>
+                               
+                                    <Text style={{ color: '#E89E0B', fontSize: 18 }}><Text style={{ fontWeight: 'bold', }}>Country:</Text><Text style={{ fontSize: 17 }}>{' '}{country.country}</Text></Text>
+                                    <Text style={{ color: '#E89E0B', fontSize: 18 }}><Text style={{ fontWeight: 'bold', }}>Capital:</Text><Text style={{ fontSize: 17 }}>{' '}{country.capital}</Text></Text>
+                                    <Text style={{ color: '#E89E0B', fontSize: 18 }}><Text style={{ fontWeight: 'bold', }}>Best national dish:</Text><Text style={{ fontSize: 17 }}>{' '}{country.BestNationalDish}</Text></Text>
+                                    <Text style={{ color: '#E89E0B', fontSize: 18 }}><Text style={{ fontWeight: 'bold', }}>Best sightseeing:</Text><Text style={{ fontSize: 17 }}>{' '}{country.BestSightseeing}</Text></Text>
+                                    {country.info && <View style={styles.additionalCountryInformation}><Text style={{ fontWeight: 'bold', color: '#E89E0B', fontSize: 18 }}>My notes about {selectedCountry?.country}:</Text><Text style={{ color: '#E89E0B', fontSize: 17, paddingLeft: 10 }}>{country.info}</Text></View>}
+                                
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setSelectedCountry(country);
+                                            setAddInfoModalVisible(true);
+                                            setInform('')
+                                        }}
+                                        style={styles.addInfoModal}>
+                                        <Text style={{ fontWeight: '700' }}>Add info +</Text>
+                                    
+                                    </TouchableOpacity>
+
+                                   {/**модалка внутрі картки краіни */}
+                                    <View style={styles.modalCenteredView}>
+                                        <Modal
+                                            animationType='fade'
+                                            transparent={true}
+                                            visible={addInfoModalVisible}
+                                        >
+                                            <View style={styles.modalCenteredView}>
+                                                <View style={styles.modalView}>
+
+                                                    {/**закрити модалку  внутрі картки краіни*/}
+                                                    <TouchableOpacity
+                                                        onPress={() => setAddInfoModalVisible(false)}
+                                                        style={{
+                                                            borderRadius: 15,
+                                                            width: 40,
+                                                            height: 40,
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            borderWidth: 1,
+                                                            borderColor: '#E89E0B',
+                                                            backgroundColor: '#1B1A17',
+                                                            marginBottom: 10
+                                                        }}>
+                                                        <Text style={{
+                                                            fontWeight: 'bold',
+                                                            color: '#E89E0B',
+                                                            fontSize: 20,
+                                                        }}>X</Text>
+                                                    </TouchableOpacity>
+
+                                                    <Text style={{
+                                                        color: '#E89E0B',
+                                                        fontSize: 17,
+                                                        marginBottom: 15
+                                                    }}>Add you'r notes about <Text style={{ fontWeight: 'bold' }}>{selectedCountry?.country}:</Text></Text>
+                                                
+                                                    <TextInput
+                                                        style={{ ...styles.input, marginBottom: 15, }}
+                                                        placeholder='Add a note'
+                                                        onChangeText={(text) => setInform(text)}
+                                                        value={inform}
+                                                    />
+                                                  
+                                                    {/**кнопка додавання інфи про краіну в модалці  внутрі картки краіни*/}
+                                                    <TouchableOpacity
+                                                        onPress={handleAddInfo}
+                                                        style={styles.addInfoModal}
+                                                    >
+                                                        <Text style={{ fontWeight: 'bold' }}>ADD +</Text>
+                                                    </TouchableOpacity>
+
+                                                </View>
+                                            </View>
+                                        </Modal>
+                                    </View>
+
+                                </View>
+                            
+                            )
+                        })}
+                    </ScrollView>
+                
+                </View>) : (<View>{statys === 'firstRegScr' && <View style={styles.subcontainer}>
                     <Text style={styles.greetingText}>Hello!!!It's you'r personal travel blog.Tab Next to get started</Text>
                 
                     
@@ -810,7 +526,7 @@ const HomeScreen = ({ navigation }) => {
 
                     <TouchableOpacity
                         disabled={name !== '' && age !== '' ? false : true}
-                        onPress={() => handleSetNameAgeSt()}
+                        onPress={() => setStatys('addPhoto')}
                         style={{ ...styles.button, marginTop: 20, ...styles.shadow }}>
                         <Text style={styles.btnTitle}>Next</Text>
                     </TouchableOpacity>
@@ -850,12 +566,7 @@ const HomeScreen = ({ navigation }) => {
                     <ScrollView style={{}}>
 
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                            <Text style={styles.textBeforeCountryList}>What countries have you been to?</Text>
-
-                            {/** cangeConteiner
-                        {visitiesCountry ? (<Text style={{ fontSize: 25, marginBottom: 20, marginTop: 20 }}>Visited something new?</Text>) : (<Text style={{ fontSize: 25, marginBottom: 20, marginTop: 20 }}>What countries have you been to?</Text>)}
-                        */}
-                    
+                            <Text style={{...styles.textBeforeCountryList, marginTop: 15}}>What countries have you been to?</Text>
                     
                             {countries.map((country) => {
                                 return (
@@ -887,219 +598,10 @@ const HomeScreen = ({ navigation }) => {
                     </ScrollView>
                
                 </View>}
+</View>)}
 
-                {statys === 'appScr' && <View style={{ flex: 1, }}>
-                    {/**Модалка з інфою юзера */}
-                    <View style={styles.modalCenteredView}>
-                        <Modal
-                            animationType="slide"
-                            transparent={true}
-                            visible={modalVisible}>
-                        
-                            <View style={styles.modalCenteredView}>
-
-                                <View style={styles.modalView}>
-                                    {selectImg ? (
-                                        <View style={styles.avatarInModal} >
-                                            <Image style={{ width: '100%', height: '100%', }} source={{ uri: selectImg }} /></View>)
-                                        : (<View style={styles.avatarInModal}><Image style={{ width: '100%', height: '100%', }} source={require('../../accets/user.png')} /></View>)}
-                                
-                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Name:</Text> {allData.name} </Text>
-                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Age:</Text> {allData.age} </Text>
-                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Total Visited:</Text> {visitiesCountry.length} </Text>
-                                    <Text style={{ ...styles.modalText, marginBottom: 8, color: '#E89E0B', fontWeight: 'bold', fontSize: 17 }}>Countries in which I have been: </Text>
-                                    <FlatList
-                                        data={visitiesCountry}
-                                        keyExtractor={visities => visities.id}
-                                        renderItem={({ item }) =>
-                                            <TouchableOpacity>
-                                                <Text style={{ marginBottom: 6, fontSize: 15, color: '#E89E0B' }} >-{item.country}</Text>
-                                            </TouchableOpacity>} />
-
-                                    <TouchableOpacity
-                                        style={{ ...styles.modalButton, ...styles.modalButtonClose }}
-                                        onPress={() => setModalVisible(!modalVisible)}>
-                                        <Text
-                                            style={styles.modalButtonIcon}>X
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </Modal>
-                    
-                    </View>
-
-                    {/**модалка для додавання краін */}
-                    <View style={styles.modalCenteredView}>
-                        <Modal
-                            animationType="slide"
-                            transparent={true}
-                            visible={addModalVisitiesCountry}>
-                        
-                            <View style={styles.modalCenteredView}>
-
-                                <View style={styles.modalView}>
-                               
-                                    <Text style={{ fontSize: 25, marginBottom: 10, color: '#E89E0B' }}>What countries have you been to?</Text>
-
-                                    <ScrollView>
-                                        
-
-                                        {countries.map((country) => {
-                                            return (
-                                                <View key={country.id}>
-                                                    <TouchableOpacity
-                                                        style={{
-                                                            borderColor: '#E89E0B',
-                                                            borderWidth: 2,
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            padding: 10,
-                                                            marginBottom: 10,
-                                                            borderRadius: 10,
-                                                            backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? '#E89E0B' : '#1B1A17'
-                                           
-                                                        }}
-                                                        onPress={() => handleCountryPress(country)}
-                                                    >
-                                                        <Text style={{color: visitiesCountry.some((i) => i.id === country.id) ? '#1B1A17' : '#E89E0B'}}>{country.country}</Text>
-                                                    </TouchableOpacity>
-                                
-                                                </View>
-                                            );
-                                        })}
-
-                                    </ScrollView>
-
-                                
-                                    <View style={{ justifyContent: 'center', marginLeft: 100 }}>
-
-                                        <TouchableOpacity
-                                            style={{
-                                                ...styles.modalButton,
-                                                marginTop: 10,
-                                                width: 40,
-                                                height: 40,
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}
-                                            onPress={() => { setAddModalVisitiesCountry(false) }}>
-                                            <Text
-                                                style={styles.modalButtonIcon}>X
-                                            </Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                        </Modal>
-                    
-                    </View>
-
-                    {/* кнопки для відкриття модалки з інфою юзера та мод для додавання краін */}
-                    <View style={{ marginBottom: 15, flexDirection: 'row', justifyContent: 'space-evenly' }}>
-
-                        <TouchableOpacity
-                            style={{ ...styles.modalButton, ...styles.modalButtonOpen }}
-                            onPress={() => { setModalVisible(true) }}>
-                            <Text style={styles.modalButtonIcon}>|{''}|{''}|</Text>
-
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={{ ...styles.modalButton, ...styles.modalButtonOpen }}
-                            onPress={() => { setAddModalVisitiesCountry(true) }}>
-                            <Text style={styles.modalButtonIcon}>{''}+{''}</Text>
-
-                        </TouchableOpacity>
-                    </View>
-               
-
-                    <ScrollView>
-                        {visitiesCountry.map((country) => {
-                            return (
-                                <View
-                                    style={styles.selectCountryCard}
-                                    key={country.id}>
-                               
-                                    <Text style={{ color: '#E89E0B', fontSize: 18 }}><Text style={{ fontWeight: 'bold', }}>Country:</Text><Text style={{ fontSize: 17 }}>{' '}{country.country}</Text></Text>
-                                    <Text style={{ color: '#E89E0B', fontSize: 18 }}><Text style={{ fontWeight: 'bold', }}>Capital:</Text><Text style={{ fontSize: 17 }}>{' '}{country.capital}</Text></Text>
-                                    <Text style={{ color: '#E89E0B', fontSize: 18 }}><Text style={{ fontWeight: 'bold', }}>Best national dish:</Text><Text style={{ fontSize: 17 }}>{' '}{country.BestNationalDish}</Text></Text>
-                                    <Text style={{ color: '#E89E0B', fontSize: 18 }}><Text style={{ fontWeight: 'bold', }}>Best sightseeing:</Text><Text style={{ fontSize: 17 }}>{' '}{country.BestSightseeing}</Text></Text>
-                                    {country.info && <View style={styles.additionalCountryInformation}><Text style={{ fontWeight: 'bold', color: '#E89E0B', fontSize: 18 }}>My notes about {selectedCountry?.country}:</Text><Text style={{ color: '#E89E0B', fontSize: 17, paddingLeft: 10 }}>{country.info}</Text></View>}
-                                
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            setSelectedCountry(country);
-                                            setAddInfoModalVisible(true);
-                                            setInform('')
-                                        }}
-                                        style={styles.addInfoModal}>
-                                        <Text style={{ fontWeight: '700' }}>Add info +</Text>
-                                    
-                                    </TouchableOpacity>
-
-                                    {/**модалка в картці краіни */}
-                                    <View style={styles.modalCenteredView}>
-                                        <Modal
-                                            animationType='fade'
-                                            transparent={true}
-                                            visible={addInfoModalVisible}
-                                        >
-                                            <View style={styles.modalCenteredView}>
-                                                <View style={styles.modalView}>
-
-                                                    <TouchableOpacity
-                                                        onPress={() => setAddInfoModalVisible(false)}
-                                                        style={{
-                                                            borderRadius: 15,
-                                                            width: 40,
-                                                            height: 40,
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            borderWidth: 1,
-                                                            borderColor: '#E89E0B',
-                                                            backgroundColor: '#1B1A17',
-                                                            marginBottom: 10
-                                                        }}>
-                                                        <Text style={{
-                                                            fontWeight: 'bold',
-                                                            color: '#E89E0B',
-                                                            fontSize: 20,
-                                                        }}>X</Text>
-                                                    </TouchableOpacity>
-
-                                                    <Text style={{
-                                                        color: '#E89E0B',
-                                                        fontSize: 17,
-                                                        marginBottom: 15
-                                                    }}>Add you'r notes about <Text style={{ fontWeight: 'bold' }}>{selectedCountry?.country}:</Text></Text>
-                                                
-                                                    <TextInput
-                                                        style={{ ...styles.input, marginBottom: 15, }}
-                                                        placeholder='Add a note'
-                                                        onChangeText={(text) => setInform(text)}
-                                                        value={inform}
-                                                    />
-                                                    {/*   onPress={()=> Alert.alert('add info')} */}
-                                                    <TouchableOpacity
-                                                        onPress={handleAddInfo}
-                                                        style={styles.addInfoModal}
-                                                    >
-                                                        <Text style={{ fontWeight: 'bold' }}>ADD +</Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                            </View>
-                                        </Modal>
-                                    </View>
-
-
-                                </View>
-                            
-                            )
-                        })}
-                    </ScrollView>
+       
                 
-                </View>}
             
             </ImageBackground>
                 
@@ -1121,6 +623,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingBottom: 20,
         paddingTop: 20,
+        
+        marginTop: 20,
 
         alignItems: 'center',
         justifyContent: 'center',
@@ -1291,7 +795,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
 
-        marginTop: 22,
+        marginTop: 35,
 
         backgroundColor: '#1B1A17',
     },
@@ -1334,4 +838,4 @@ const styles = StyleSheet.create({
 
 export default HomeScreen;
 
-
+ 
