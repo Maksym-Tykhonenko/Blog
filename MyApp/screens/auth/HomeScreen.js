@@ -252,7 +252,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.conteiner}>
             
             <ImageBackground
-                source={require('../../accets/gameElements/background.png')}
+                source={require('../../accets/gameElements/backgr.png')}
                 resizeMode='cover'
                 style={styles.image}
             >
@@ -498,7 +498,7 @@ const HomeScreen = ({ navigation }) => {
                     
                     <TouchableOpacity
                         onPress={() => setStatys('secondRegScr')}
-                        style={{...styles.button, ...styles.shadow}}>
+                        style={{...styles.button, ...styles.shadow, marginTop: 75}}>
                         
                         <Text style={styles.btnTitle}>Next</Text>
                     </TouchableOpacity>
@@ -510,16 +510,18 @@ const HomeScreen = ({ navigation }) => {
                     <View style={{ marginTop: 50 }}>
                         
                         <TextInput
-                            style={{...styles.input, ...styles.shadow}}
-                            placeholder='Enter you are name'
+                            style={{...styles.input, ...styles.shadow, fontStyle: 'italic',fontWeight: 'normal'}}
+                                placeholder='Enter you are name'
+                                placeholderTextColor='#696969'
                             onChangeText={(name) => setName((prev) => ({ ...prev, name }))}
                         />
                     </View>
 
                     <View style={{ marginTop: 20, marginBottom: 50 }}>
                         <TextInput
-                            style={{...styles.input, ...styles.shadow}}
-                            placeholder='Enter you are age'
+                                style={{ ...styles.input, ...styles.shadow, fontStyle: 'italic', fontWeight: 'normal' }}
+                                placeholder='Enter you are age'
+                                placeholderTextColor='#696969'
                             onChangeText={(age) => setAge((prev) => ({ ...prev, age }))}
                         />
                     </View>
@@ -527,7 +529,7 @@ const HomeScreen = ({ navigation }) => {
                     <TouchableOpacity
                         disabled={name !== '' && age !== '' ? false : true}
                         onPress={() => setStatys('addPhoto')}
-                        style={{ ...styles.button, marginTop: 20, ...styles.shadow }}>
+                        style={{ ...styles.button, marginTop: 140, ...styles.shadow }}>
                         <Text style={styles.btnTitle}>Next</Text>
                     </TouchableOpacity>
                 </View>}
@@ -574,7 +576,7 @@ const HomeScreen = ({ navigation }) => {
                                         <TouchableOpacity
                                             style={{
                                                 ...styles.countryItem,
-                                                backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? '#E89E0B' : 'transparent',
+                                                backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? '#E89E0B' : 'rgba(0,0,0,0.7)',
                                             
                                             }}
                                             onPress={() => handleCountryPress(country)}
@@ -608,6 +610,58 @@ const HomeScreen = ({ navigation }) => {
         </View>
     );
 };   
+
+////ініт AppTrackingTransparency поп-ап
+
+//    if #available(iOS 14, *) {
+//        ATTrackingManager.requestTrackingAuthorization { status in
+//            switch status {
+//            case .authorized:
+//                // Tracking authorization dialog was shown
+//                // and we are authorized
+//                print("Authorized")
+//                
+//                // Now that we are authorized we can get the IDFA
+//                print(ASIdentifierManager.shared().advertisingIdentifier)
+//            case .denied:
+//                // Tracking authorization dialog was
+//                // shown and permission is denied
+//                print("Denied")
+//            case .notDetermined:
+//                // Tracking authorization dialog has not been shown
+//                print("Not Determined")
+//            case .restricted:
+//                print("Restricted")
+//            @unknown default:
+//                print("Unknown")
+//            }
+//        }
+//    }
+
+///////////////////////////
+//func requestPermission() {
+//  if (@available(iOS 14.5, *)) {
+//      [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+//          switch (status) {
+//              case ATTrackingManagerAuthorizationStatusAuthorized:
+//                  NSLog(@"Користувач дав дозвіл на відстеження");
+//                  break;
+//              case ATTrackingManagerAuthorizationStatusDenied:
+//                  NSLog(@"Користувач відхилив запит на відстеження");
+//                  break;
+//              case ATTrackingManagerAuthorizationStatusNotDetermined:
+//                  NSLog(@"Запит на відстеження ще не вирішений");
+//                  break;
+//              case ATTrackingManagerAuthorizationStatusRestricted:
+//                  NSLog(@"Відстеження обмежено (наприклад, налаштування батьківського контролю)");
+//                  break;
+//              default:
+//                  break;
+//          }
+//      }];
+//  }
+//}
+
 
 const styles = StyleSheet.create({
     conteiner: {
@@ -755,7 +809,8 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingLeft: 15,
 
-        backgroundColor: 'transparent',
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        //opacity: 0.5,
 
         borderRadius: 15,
         borderWidth: 1,
