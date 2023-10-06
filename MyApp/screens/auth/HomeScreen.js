@@ -258,138 +258,19 @@ const HomeScreen = ({ navigation }) => {
             >
             
                 {allData ? (<View style={{ flex: 1,  }}>
-                    
-                    {/* <модалка інфи юзера */}
-                    <View style={{...styles.modalCenteredView, }}>
-                        <Modal
-                            animationType="slide"
-                            transparent={true}
-                            visible={modalVisible}>
-                        
-                            <View style={styles.modalCenteredView}>
-
-                                <View style={{...styles.modalView}}>
-                                    {selectImg ? (
-                                        <View style={styles.avatarInModal} >
-                                            <TouchableOpacity
-                                            onPress={() => {
-                                                imagePicker();
-                                            }}>
-                                                <Image style={{ width: '100%', height: '100%', }} source={{ uri: selectImg }} />
-                                            </TouchableOpacity>
-                                            </View>)
-                                        : (<View style={styles.avatarInModal}>
-                                            <TouchableOpacity
-                                                onPress={() => {
-                                                imagePicker();
-                                            }}>
-                                            <Image style={{ width: '100%', height: '100%', }} source={require('../../accets/user.png')} />
-                                        </TouchableOpacity>
-                                        </View>)}
-                                
-                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Name:</Text> {allData.name} </Text>
-                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Age:</Text> {allData.age} </Text>
-                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Total Visited:</Text> {visitiesCountry.length} </Text>
-                                    <Text style={{ ...styles.modalText, marginBottom: 8, color: '#E89E0B', fontWeight: 'bold', fontSize: 17 }}>Countries in which I have been: </Text>
-                                    <FlatList
-                                        data={visitiesCountry}
-                                        keyExtractor={visities => visities.id}
-                                        renderItem={({ item }) =>
-                                            <TouchableOpacity>
-                                                <Text style={{ marginBottom: 6, fontSize: 15, color: '#E89E0B' }} >-{item.country}</Text>
-                                            </TouchableOpacity>} />
-
-                                    <TouchableOpacity
-                                        style={{ ...styles.modalButton, ...styles.modalButtonClose }}
-                                        onPress={() => setModalVisible(!modalVisible)}>
-                                        <Text
-                                            style={styles.modalButtonIcon}>X
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </Modal>
-                    
-                    </View>
-
-                    {/**модалка додав краін */}
-                    <View style={styles.modalCenteredView}>
-                        <Modal
-                            animationType="slide"
-                            transparent={true}
-                            visible={addModalVisitiesCountry}>
-                        
-                            <View style={styles.modalCenteredView}>
-
-                                <View style={styles.modalView}>
-                               
-                                    <Text style={{ fontSize: 25, marginBottom: 10, color: '#E89E0B' }}>What countries have you been to?</Text>
-
-                                    <ScrollView>
-                                        
-
-                                        {countries.map((country) => {
-                                            return (
-                                                <View key={country.id}>
-                                                    <TouchableOpacity
-                                                        style={{
-                                                            borderColor: '#E89E0B',
-                                                            borderWidth: 2,
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            padding: 10,
-                                                            marginBottom: 10,
-                                                            borderRadius: 10,
-                                                            backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? '#E89E0B' : '#1B1A17'
-                                           
-                                                        }}
-                                                        onPress={() => handleCountryPressInModalView(country)}
-                                                    >
-                                                        <Text style={{color: visitiesCountry.some((i) => i.id === country.id) ? '#1B1A17' : '#E89E0B'}}>{country.country}</Text>
-                                                    </TouchableOpacity>
-                                
-                                                </View>
-                                            );
-                                        })}
-
-                                    </ScrollView>
-
-                                
-                                    <View style={{ justifyContent: 'center', marginLeft: 100 }}>
-
-                                        <TouchableOpacity
-                                            style={{
-                                                ...styles.modalButton,
-                                                marginTop: 10,
-                                                width: 40,
-                                                height: 40,
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }}
-                                            onPress={() => { setAddModalVisitiesCountry(false) }}>
-                                            <Text
-                                                style={styles.modalButtonIcon}>X
-                                            </Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                        </Modal>
-                    
-                    </View>
 
                     {/** кнопки відкриття модалок */}
-                    <View style={{ marginBottom: 15, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                    <View style={{ marginBottom: 15, flexDirection: 'row', justifyContent: 'space-evenly', }}>
 
                         <TouchableOpacity
-                            style={{ ...styles.modalButton, ...styles.modalButtonOpen }}
+                            style={{ ...styles.modalButton, ...styles.modalButtonOpen,  }}
                             onPress={() => { setModalVisible(true) }}>
                             <Text style={styles.modalButtonIcon}>|{''}|{''}|</Text>
 
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                            style={{ ...styles.modalButton, ...styles.modalButtonOpen }}
+                            style={{ ...styles.modalButton, ...styles.modalButtonOpen,  }}
                             onPress={() => { setAddModalVisitiesCountry(true) }}>
                             <Text style={styles.modalButtonIcon}>{''}+{''}</Text>
 
@@ -491,6 +372,127 @@ const HomeScreen = ({ navigation }) => {
                             )
                         })}
                     </ScrollView>
+
+                                        
+                    {/* <модалка інфи юзера */}
+                    <View style={{...styles.modalCenteredView, backgroundColor: 'rgba(0,0,0,0.5)'}}>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}>
+                        
+                            <View style={styles.modalCenteredView}>
+
+                                <View style={{...styles.modalView}}>
+                                    {selectImg ? (
+                                        <View style={styles.avatarInModal} >
+                                            <TouchableOpacity
+                                            onPress={() => {
+                                                imagePicker();
+                                            }}>
+                                                <Image style={{ width: '100%', height: '100%', }} source={{ uri: selectImg }} />
+                                            </TouchableOpacity>
+                                            </View>)
+                                        : (<View style={styles.avatarInModal}>
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                imagePicker();
+                                            }}>
+                                            <Image style={{ width: '100%', height: '100%', }} source={require('../../accets/user.png')} />
+                                        </TouchableOpacity>
+                                        </View>)}
+                                
+                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Name:</Text> {allData.name} </Text>
+                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Age:</Text> {allData.age} </Text>
+                                    <Text style={{ marginBottom: 8, fontSize: 17, color: '#E89E0B' }}><Text style={{fontWeight: 'bold', fontSize: 17}}>Total Visited:</Text> {visitiesCountry.length} </Text>
+                                    <Text style={{ ...styles.modalText, marginBottom: 8, color: '#E89E0B', fontWeight: 'bold', fontSize: 17 }}>Countries in which I have been: </Text>
+                                    <FlatList
+                                        data={visitiesCountry}
+                                        keyExtractor={visities => visities.id}
+                                        renderItem={({ item }) =>
+                                            <TouchableOpacity>
+                                                <Text style={{ marginBottom: 6, fontSize: 15, color: '#E89E0B' }} >-{item.country}</Text>
+                                            </TouchableOpacity>} />
+
+                                    <TouchableOpacity
+                                        style={{ ...styles.modalButton, ...styles.modalButtonClose }}
+                                        onPress={() => setModalVisible(!modalVisible)}>
+                                        <Text
+                                            style={styles.modalButtonIcon}>X
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </Modal>
+                    
+                    </View>
+
+                    {/**модалка додав краін */}
+                    <View style={{...styles.modalCenteredView, backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={addModalVisitiesCountry}>
+                        
+                            <View style={styles.modalCenteredView}>
+
+                                <View style={styles.modalView}>
+                               
+                                    <Text style={{ fontSize: 25, marginBottom: 10, color: '#E89E0B' }}>What countries have you been to?</Text>
+
+                                    <ScrollView>
+                                        
+
+                                        {countries.map((country) => {
+                                            return (
+                                                <View key={country.id}>
+                                                    <TouchableOpacity
+                                                        style={{
+                                                            borderColor: '#E89E0B',
+                                                            borderWidth: 2,
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            padding: 10,
+                                                            marginBottom: 10,
+                                                            borderRadius: 10,
+                                                            backgroundColor: visitiesCountry.some((i) => i.id === country.id) ? '#E89E0B' : '#1B1A17'
+                                           
+                                                        }}
+                                                        onPress={() => handleCountryPressInModalView(country)}
+                                                    >
+                                                        <Text style={{color: visitiesCountry.some((i) => i.id === country.id) ? '#1B1A17' : '#E89E0B'}}>{country.country}</Text>
+                                                    </TouchableOpacity>
+                                
+                                                </View>
+                                            );
+                                        })}
+
+                                    </ScrollView>
+
+                                
+                                    <View style={{ justifyContent: 'center', marginLeft: 100 }}>
+
+                                        <TouchableOpacity
+                                            style={{
+                                                ...styles.modalButton,
+                                                marginTop: 10,
+                                                width: 40,
+                                                height: 40,
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}
+                                            onPress={() => { setAddModalVisitiesCountry(false) }}>
+                                            <Text
+                                                style={styles.modalButtonIcon}>X
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                        </Modal>
+                    
+                    </View>
+
                 
                 </View>) : (<View>{statys === 'firstRegScr' && <View style={styles.subcontainer}>
                     <Text style={styles.greetingText}>Hello!!!It's you'r personal travel blog.Tab Next to get started</Text>
@@ -801,7 +803,6 @@ const styles = StyleSheet.create({
     selectCountryCard: {
         justifyContent: 'center',
 
-        marginBottom: 5,
         marginBottom: 10,
         marginHorizontal: 20,
         
@@ -844,13 +845,13 @@ const styles = StyleSheet.create({
 
         backgroundColor: 'transparent',
     },
-    /////////////////
+    /////////////////'rgba(0,0,0,0.7)'  '#1B1A17'
     modalCenteredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
 
-        marginTop: 35,
+        marginTop: 34,
 
         backgroundColor: '#1B1A17',
     },
