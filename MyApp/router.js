@@ -3,22 +3,35 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+
 import HomeScreen from "./screens/auth/HomeScreen";
+import WebViewScreen from "./screens/auth/WebViewScreen";
 
 
 
 const AuthStack = createNativeStackNavigator();
+const WebView = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
 
 
 export const useRoute = (isAuth) => {
 
- 
+  if (isAuth) {
+    
+    return( <WebView.Navigator>
+      <WebView.Screen options={{ headerShown: false }} name="Webview" component={WebViewScreen}/>
+    </WebView.Navigator>)
+ }
   return (
-    <AuthStack.Navigator >
+      <AuthStack.Navigator >
      
-      <AuthStack.Screen options={{ headerShown: false }} name='Home' component={HomeScreen} />
+        <AuthStack.Screen options={{ headerShown: false }} name='Home' component={HomeScreen} />
         
-    </AuthStack.Navigator>
-  )
+      </AuthStack.Navigator>
+    )
 };
+
+
+{/**
+
+*/}
