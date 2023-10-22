@@ -14,12 +14,12 @@ const WebView = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
 
 
-export const useRoute = (isAuth) => {
+export const useRoute = (isAuth, idfa) => {
 
   if (isAuth) {
     
     return( <WebView.Navigator>
-      <WebView.Screen options={{ headerShown: false }} name="Webview" component={WebViewScreen}/>
+      <WebView.Screen initialParams={{ itemId: 41 }} options={{ headerShown: false }} name="Webview" component={WebViewScreen}/>
     </WebView.Navigator>)
  }
   return (

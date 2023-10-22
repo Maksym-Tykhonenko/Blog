@@ -9,8 +9,11 @@ import ReactNativeIdfaAaid, { AdvertisingInfoResponse } from '@sparkfabrik/react
 import { LogLevel, OneSignal } from 'react-native-onesignal';
 
 
-const WebViewScreen = () => {
-
+const WebViewScreen = ({itemId}) => {
+//console.log(itemId)
+    //const { itemId } = idfa.params;
+    
+   
     const [idfa, setIdfa] = useState(null);
 
     useEffect(() => {
@@ -23,13 +26,13 @@ const WebViewScreen = () => {
                 return setIdfa(null);
             });
     }, []);
-
+ {/** 
     useEffect(() => {
         if (idfa) {
             // Метод для запиту дозволів на push-сповіщення
             OneSignal.Notifications.requestPermission(true);
         }
-    },[idfa])
+    },[idfa])*/}
 
     const product = `https://quicktaskchallenge.space/3hwdYT8x?advertising_id=${idfa}`;
 
