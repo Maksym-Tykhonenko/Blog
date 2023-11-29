@@ -72,6 +72,7 @@ const HomeScreen = ({ navigation }) => {
         getFromStoreAllData();
         getFromStoreVisitiesCountry();
         getFromStoreSelectImg();
+        
         setTimeout(() => {
             
             setIsLoading(false)
